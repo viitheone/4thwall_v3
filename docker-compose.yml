@@ -1,0 +1,68 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    environment:
+      - MODEL_PATH=viitheone/waf-model
+      - DECISION_LOG=/app/logs/decision_log.json
+      - DVWA_URL=http://dvwa:80
+    volumes:
+      - ./logs:/app/logs
+      - hf_cache:/root/.cache/huggingface
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=5)",
+        ]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 180s
+    restart: unless-stopped
+
+
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  nginx:
+    image: owasp/modsecurity-crs:nginx
+    # Windows bind mounts are often root-owned; nginx user can't create access.log without this (dev-only).
+    user: "0:0"
+    ports:
+      # CRS nginx listens on 8080 inside the container (unprivileged image default), not 80.
+      - "80:8080"
+    environment:
+      # Reverse-proxy to API, which evaluates ML score inline before passing to DVWA
+      - BACKEND=http://api:8000
+      # Explicit blocking mode (default is On; set DetectionOnly if you only want logs).
+      - MODSEC_RULE_ENGINE=On
+      # Slightly easier to trigger blocks on obvious attack probes (optional; raise for production).
+      - ANOMALY_INBOUND=4
+    volumes:
+      # Host logs only under /waf — mounting over ALL of /var/log/nginx makes
+      # /var/log/nginx/error.log unwritable for the non-root nginx user (Windows bind mounts).
+      - ./logs:/var/log/nginx/waf
+      - ./nginx/conf.d/99-waf-host-access-log.conf:/etc/nginx/conf.d/99-waf-host-access-log.conf:ro
+    depends_on:
+      - api
+      - dvwa
+    restart: unless-stopped
+
+  dvwa:
+    image: vulnerables/web-dvwa
+    restart: unless-stopped
+
+volumes:
+  hf_cache:

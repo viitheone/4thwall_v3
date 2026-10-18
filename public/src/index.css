@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-background font-mono antialiased;
+}
+
+.card-soc {
+  @apply relative overflow-hidden rounded-xl border border-panel/25 bg-panel/10 shadow-card backdrop-blur-md;
+}
+
+.card-soc::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(234, 224, 213, 0.18) 0%,
+    rgba(234, 224, 213, 0.06) 35%,
+    rgba(234, 224, 213, 0.12) 100%
+  );
+  pointer-events: none;
+}
+
+.card-soc > * {
+  position: relative;
+  z-index: 1;
+}
+
+.card-header {
+  @apply flex items-center justify-between mb-3;
+}
+
+.badge-rule {
+  @apply inline-flex items-center rounded border border-panel/40 bg-panel/10 px-2 py-0.5 text-xs font-medium text-panel;
+}
+
+.badge-method {
+  @apply inline-flex items-center rounded border px-2 py-0.5 text-xs font-semibold;
+}
+
+.badge-method-get {
+  @apply border-background/30 text-background bg-panel;
+}
+
+.badge-method-post {
+  @apply border-panel/40 text-panel bg-panel/10;
+}
+
+.row-malicious {
+  @apply border-l-2 border-panel bg-panel/10;
+}
+
+.row-benign {
+  @apply border border-panel/15 bg-panel/5;
+}
+
+/* Custom scrollbar for panels */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(234, 224, 213, 0.05);
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(234, 224, 213, 0.2);
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(234, 224, 213, 0.4);
+}
+
