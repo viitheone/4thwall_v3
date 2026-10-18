@@ -11,7 +11,7 @@ from fastapi.responses import JSONResponse, HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 import httpx
 
-from api.dashboard import router as dashboard_router
+from api.dashboard import router as dashboard_router, notify_dashboard_update
 from api.schemas import BatchScoreRequest, BatchScoreResponse, ScoreRequest, ScoreResponse
 from ml.infer import WAFClassifier
 from ml.preprocess import serialize_request
@@ -193,6 +193,7 @@ def append_decision(entry: dict) -> None:
     os.makedirs(os.path.dirname(DECISION_LOG_PATH), exist_ok=True)
     with open(DECISION_LOG_PATH, "a", encoding="utf-8") as f:
         f.write(json.dumps(entry) + "\n")
+    notify_dashboard_update()
 
 http_client = httpx.AsyncClient(timeout=30.0)
 

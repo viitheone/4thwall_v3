@@ -11,12 +11,7 @@ import {
   LiveTrafficEntry,
   SummaryStats,
   TopAttacker,
-  fetchAiModelStatus,
-  fetchAttackDistribution,
-  fetchAttacksByHour,
-  fetchLiveTraffic,
-  fetchSummaryStats,
-  fetchTopAttackers,
+  subscribeToDashboardStream,
 } from './api/dashboard';
 import { LiveTrafficRow } from './components/LiveTrafficRow';
 import { TopAttackerCard } from './components/TopAttackerCard';
@@ -34,7 +29,6 @@ import {
   Cell,
 } from 'recharts';
 
-const REFRESH_INTERVAL_MS = 1000;
 const TRAFFIC_PANEL_HEIGHT = 'h-[30rem]';
 
 function useDashboardData() {
@@ -44,37 +38,33 @@ function useDashboardData() {
   const [byHour, setByHour] = useState<AttacksByHourPoint[]>([]);
   const [topAttackers, setTopAttackers] = useState<TopAttacker[]>([]);
   const [aiStatus, setAiStatus] = useState<AiModelStatus | null>(null);
-
-  const refreshAll = useCallback(async () => {
-    try {
-      const [s, d, h, t, a, live] = await Promise.all([
-        fetchSummaryStats(),
-        fetchAttackDistribution(),
-        fetchAttacksByHour(),
-        fetchTopAttackers(),
-        fetchAiModelStatus(),
-        fetchLiveTraffic(),
-      ]);
-      setSummary(s);
-      setDistribution(d);
-      setByHour(h);
-      setTopAttackers(t);
-      setAiStatus(a);
-      setTraffic(live);
-    } catch {
-      // keep previous successful state on transient polling failures
-    }
-  }, []);
+  const [isConnected, setIsConnected] = useState<boolean>(false);
 
   useEffect(() => {
-    void refreshAll();
-    const id = setInterval(() => {
-      void refreshAll();
-    }, REFRESH_INTERVAL_MS);
-    return () => clearInterval(id);
-  }, [refreshAll]);
+    const unsubscribe = subscribeToDashboardStream(
+      (data) => {
+        setIsConnected(true);
+        if (data.summary) setSummary(data.summary);
+        if (data.traffic) setTraffic(data.traffic);
+        if (data.distribution) setDistribution(data.distribution);
+        if (data.byHour) setByHour(data.byHour);
+        if (data.topAttackers) setTopAttackers(data.topAttackers);
+        if (data.aiStatus) setAiStatus(data.aiStatus);
+      },
+      () => {
+        setIsConnected(false);
+      },
+      () => {
+        setIsConnected(true);
+      }
+    );
 
-  return { summary, traffic, distribution, byHour, topAttackers, aiStatus };
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  return { summary, traffic, distribution, byHour, topAttackers, aiStatus, isConnected };
 }
 
 const ATTACK_COLORS = [
@@ -97,7 +87,13 @@ const formatHourString = (val: string) => {
 };
 
 function App() {
-  const { summary, traffic, distribution, byHour, topAttackers, aiStatus } = useDashboardData();
+  const { summary, traffic, distribution, byHour, topAttackers, aiStatus, isConnected } = useDashboardData();
+  const [now, setNow] = useState(() => new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const maxAttempts = useMemo(
     () => topAttackers.reduce((max, a) => Math.max(max, a.attempts), 0),
@@ -113,10 +109,17 @@ function App() {
             Real-time anomaly detection for web traffic
           </p>
         </div>
-        <div className="rounded border border-panel/40 bg-panel/10 px-3 py-1 text-xs font-medium text-panel shadow-card backdrop-blur-md">
-          <span className="text-[11px] text-panel">LIVE</span>{' '}
+        <div className="flex items-center gap-2 rounded border border-panel/40 bg-panel/10 px-3 py-1 text-xs font-medium text-panel shadow-card backdrop-blur-md">
+          <span
+            className={`inline-block h-2 w-2 rounded-full ${
+              isConnected ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'
+            }`}
+          />
+          <span className="text-[11px] text-panel font-semibold">
+            {isConnected ? 'LIVE (SSE)' : 'CONNECTING...'}
+          </span>
           <span className="text-panel/70">
-            {new Date().toLocaleTimeString(undefined, { hour12: true })}
+            {now.toLocaleTimeString(undefined, { hour12: true })}
           </span>
         </div>
       </header>
