@@ -3,17 +3,38 @@ Dashboard API: summary, live traffic, attack distribution, top attackers, AI sta
 Serves the React dashboard; can read from decision_log when mounted, else returns mock data.
 """
 
+import asyncio
 import json
 import os
 from collections import defaultdict
 from pathlib import Path
 
 from fastapi import APIRouter, Request
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
 router = APIRouter(prefix="/dashboard", tags=["dashboard"])
 
 DECISION_LOG_PATH = os.environ.get("DECISION_LOG", "logs/decision_log.json")
+
+_subscribers: set[asyncio.Event] = set()
+
+def notify_dashboard_update() -> None:
+    """Notify all connected SSE subscribers of new decisions."""
+    for ev in list(_subscribers):
+        ev.set()
+
+
+def _get_log_fingerprint() -> tuple[float, int]:
+    """Return (mtime, size) to quickly detect log file changes without reading it."""
+    path = Path(DECISION_LOG_PATH)
+    if not path.exists():
+        return (0.0, 0)
+    try:
+        stat = path.stat()
+        return (stat.st_mtime, stat.st_size)
+    except OSError:
+        return (0.0, 0)
 
 
 def _read_decision_log(max_lines: int = 0) -> list[dict]:
@@ -176,8 +197,153 @@ def get_ai_status(request: Request):
         "precision": metrics["precision"] if metrics else 0.0,
         "recall": metrics["recall"] if metrics else 0.0,
         "f1": metrics["f1"] if metrics else 0.0,
+    }
+
+
+def _compute_dashboard_data(request: Request | None = None) -> dict:
+    """Compute all dashboard stats in a single pass over the decision log."""
+    entries = _read_decision_log()
+    
+    # 1. Summary stats
+    total = len(entries)
+    benign = sum(1 for e in entries if e.get("action") == "ALLOW" and (e.get("ml_score") or 0) < 0.6)
+    malicious = total - benign
+    modsec_blocks = sum(1 for e in entries if e.get("blocked_by") == "modsec")
+    ml_blocks = sum(1 for e in entries if e.get("blocked_by") == "ml_model")
+    correct = sum(
+        1 for e in entries
+        if (e.get("action") == "BLOCK" and (e.get("ml_score") or 0) > 0.6)
+        or (e.get("action") == "ALLOW" and (e.get("ml_score") or 0) < 0.6)
+    )
+    accuracy = round((correct / total) if total else 0.0, 2)
+    summary = {
+        "totalRequests": total,
+        "benignRequests": benign,
+        "maliciousRequests": malicious,
+        "modsecBlocks": modsec_blocks,
+        "mlBlocks": ml_blocks,
+        "accuracy": accuracy,
+    }
+
+    # 2. Live traffic (last 100 entries)
+    live_slice = entries[-100:] if len(entries) > 100 else entries
+    traffic = []
+    for i, e in enumerate(reversed(live_slice)):
+        parsed = _parse_request_text(e.get("request_text", ""))
+        action = e.get("action", "ALLOW")
+        score = e.get("ml_score") or 0.0
+        blocked_by = e.get("blocked_by")
+        verdict = "malicious" if action == "BLOCK" or score > 0.6 else "benign"
+        traffic.append({
+            "id": f"live-{len(live_slice)-i}",
+            "timestamp": e.get("timestamp", ""),
+            "method": parsed["method"],
+            "path": parsed["path"],
+            "ip": "0.0.0.0",
+            "verdict": verdict,
+            "statusCode": parsed["status"],
+            "blockedBy": blocked_by,
+            "attackType": "SQLi" if "OR" in (e.get("request_text") or "") else None,
+            "aiConfidence": round(score, 2),
+        })
+
+    # 3. Attack distribution
+    if not entries:
+        distribution = [{"type": "None", "count": 0}]
+    else:
+        by_source = defaultdict(int)
+        for e in entries:
+            blocked_by = e.get("blocked_by")
+            if blocked_by == "modsec":
+                by_source["ModSec Block"] += 1
+            else:
+                by_source[e.get("action", "ALLOW")] += 1
+        distribution = [{"type": k, "count": v} for k, v in sorted(by_source.items())]
+
+    # 4. Attacks by hour
+    by_hour = defaultdict(int)
+    for e in entries:
+        ts = e.get("timestamp", "")[:13]
+        if ts:
+            by_hour[ts] += 1
+    attacks_by_hour = [{"hour": h, "count": c} for h, c in sorted(by_hour.items())][-24:]
+
+    # 5. Top attackers
+    blocked = [e for e in entries if e.get("action") == "BLOCK"]
+    top_attackers = [{"ip": "0.0.0.0", "attempts": len(blocked)}] if blocked else []
+
+    # 6. AI Model status
+    classifier = getattr(request.app.state, "waf_classifier", None) if request else None
+    loaded = classifier is not None
+    metrics = getattr(classifier, "metrics", None) if loaded else None
+    ai_status = {
+        "architecture": "DistilBERT" if loaded else "N/A",
+        "version": "1.0",
+        "parameters": "WAF classifier",
+        "trainingProgress": 100 if loaded else 0,
+        "accuracy": metrics["accuracy"] if metrics else 0.0,
+        "precision": metrics["precision"] if metrics else 0.0,
+        "recall": metrics["recall"] if metrics else 0.0,
+        "f1": metrics["f1"] if metrics else 0.0,
         "lastUpdated": "2026-02-01T00:00:00Z",
     }
+
+    return {
+        "summary": summary,
+        "traffic": traffic,
+        "distribution": distribution,
+        "byHour": attacks_by_hour,
+        "topAttackers": top_attackers,
+        "aiStatus": ai_status,
+    }
+
+
+@router.get("/stream")
+async def stream_dashboard(request: Request):
+    """Server-Sent Events endpoint streaming real-time dashboard updates."""
+    async def event_generator():
+        ev = asyncio.Event()
+        _subscribers.add(ev)
+        last_fingerprint = None
+        try:
+            # Immediate snapshot on connection
+            data = _compute_dashboard_data(request)
+            last_fingerprint = _get_log_fingerprint()
+            yield f"data: {json.dumps(data)}\n\n"
+
+            while True:
+                if await request.is_disconnected():
+                    break
+                try:
+                    await asyncio.wait_for(ev.wait(), timeout=1.0)
+                except asyncio.TimeoutError:
+                    pass
+                ev.clear()
+
+                if await request.is_disconnected():
+                    break
+
+                current_fingerprint = _get_log_fingerprint()
+                if current_fingerprint != last_fingerprint:
+                    last_fingerprint = current_fingerprint
+                    data = _compute_dashboard_data(request)
+                    yield f"data: {json.dumps(data)}\n\n"
+                else:
+                    yield ": keepalive\n\n"
+        except asyncio.CancelledError:
+            pass
+        finally:
+            _subscribers.discard(ev)
+
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache, no-transform",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no",
+        },
+    )
 
 
 class FlagFPRequest(BaseModel):

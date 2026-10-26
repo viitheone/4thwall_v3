@@ -90,3 +90,43 @@ export async function flagFalsePositive(entry: LiveTrafficEntry): Promise<{ stat
   return data;
 }
 
+export interface DashboardData {
+  summary: SummaryStats;
+  traffic: LiveTrafficEntry[];
+  distribution: AttackDistributionPoint[];
+  byHour: AttacksByHourPoint[];
+  topAttackers: TopAttacker[];
+  aiStatus: AiModelStatus;
+}
+
+export function subscribeToDashboardStream(
+  onData: (data: DashboardData) => void,
+  onError?: (err: Event) => void,
+  onOpen?: () => void
+): () => void {
+  const apiBase = import.meta.env.VITE_API_BASE_URL || '/api';
+  const streamUrl = `${apiBase.replace(/\/$/, '')}/dashboard/stream`;
+  const es = new EventSource(streamUrl);
+
+  es.onopen = () => {
+    if (onOpen) onOpen();
+  };
+
+  es.onmessage = (event) => {
+    try {
+      const data: DashboardData = JSON.parse(event.data);
+      onData(data);
+    } catch (e) {
+      console.error('Failed to parse SSE dashboard payload', e);
+    }
+  };
+
+  es.onerror = (err) => {
+    if (onError) onError(err);
+  };
+
+  return () => {
+    es.close();
+  };
+}
+
