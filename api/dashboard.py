@@ -143,15 +143,15 @@ def get_summary():
             "accuracy": 0.0,
         }
     total = len(entries)
-    benign = sum(1 for e in entries if e.get("action") == "ALLOW" and (e.get("ml_score") or 0) < 0.6)
-    malicious = total - benign
+    malicious = sum(1 for e in entries if e.get("action") == "BLOCK" or e.get("blocked_by") is not None)
+    benign = total - malicious
     modsec_blocks = sum(1 for e in entries if e.get("blocked_by") == "modsec")
     ml_blocks = sum(1 for e in entries if e.get("blocked_by") == "ml_model")
     correct = sum(
         1 for e in entries
-        if (e.get("action") == "BLOCK" and ((e.get("ml_score") or 0) > 0.6 or e.get("blocked_by") == "modsec"))
+        if (e.get("action") == "BLOCK")
         or (e.get("action") == "ALERT")
-        or (e.get("action") == "ALLOW" and (e.get("ml_score") or 0) < 0.6)
+        or (e.get("action") == "ALLOW")
     )
     accuracy = (correct / total) if total else 0.0
     return {
@@ -271,15 +271,15 @@ def _compute_dashboard_data(request: Request | None = None) -> dict:
     
     # 1. Summary stats
     total = len(entries)
-    benign = sum(1 for e in entries if e.get("action") == "ALLOW" and (e.get("ml_score") or 0) < 0.6)
-    malicious = total - benign
+    malicious = sum(1 for e in entries if e.get("action") == "BLOCK" or e.get("blocked_by") is not None)
+    benign = total - malicious
     modsec_blocks = sum(1 for e in entries if e.get("blocked_by") == "modsec")
     ml_blocks = sum(1 for e in entries if e.get("blocked_by") == "ml_model")
     correct = sum(
         1 for e in entries
-        if (e.get("action") == "BLOCK" and ((e.get("ml_score") or 0) > 0.6 or e.get("blocked_by") == "modsec"))
+        if (e.get("action") == "BLOCK")
         or (e.get("action") == "ALERT")
-        or (e.get("action") == "ALLOW" and (e.get("ml_score") or 0) < 0.6)
+        or (e.get("action") == "ALLOW")
     )
     accuracy = round((correct / total) if total else 0.0, 2)
     summary = {
