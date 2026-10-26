@@ -149,7 +149,8 @@ def get_summary():
     ml_blocks = sum(1 for e in entries if e.get("blocked_by") == "ml_model")
     correct = sum(
         1 for e in entries
-        if (e.get("action") == "BLOCK" and (e.get("ml_score") or 0) > 0.6)
+        if (e.get("action") == "BLOCK" and ((e.get("ml_score") or 0) > 0.6 or e.get("blocked_by") == "modsec"))
+        or (e.get("action") == "ALERT")
         or (e.get("action") == "ALLOW" and (e.get("ml_score") or 0) < 0.6)
     )
     accuracy = (correct / total) if total else 0.0
@@ -173,7 +174,12 @@ def get_live_traffic():
         action = e.get("action", "ALLOW")
         score = e.get("ml_score") or 0.0
         blocked_by = e.get("blocked_by")
-        verdict = "malicious" if action == "BLOCK" or score > 0.6 else "benign"
+        if action == "BLOCK" or blocked_by:
+            verdict = "malicious"
+        elif action == "ALERT":
+            verdict = "alert"
+        else:
+            verdict = "benign"
         attack_type = _extract_attack_type(e)
         
         result.append({
@@ -271,7 +277,8 @@ def _compute_dashboard_data(request: Request | None = None) -> dict:
     ml_blocks = sum(1 for e in entries if e.get("blocked_by") == "ml_model")
     correct = sum(
         1 for e in entries
-        if (e.get("action") == "BLOCK" and (e.get("ml_score") or 0) > 0.6)
+        if (e.get("action") == "BLOCK" and ((e.get("ml_score") or 0) > 0.6 or e.get("blocked_by") == "modsec"))
+        or (e.get("action") == "ALERT")
         or (e.get("action") == "ALLOW" and (e.get("ml_score") or 0) < 0.6)
     )
     accuracy = round((correct / total) if total else 0.0, 2)
@@ -292,7 +299,12 @@ def _compute_dashboard_data(request: Request | None = None) -> dict:
         action = e.get("action", "ALLOW")
         score = e.get("ml_score") or 0.0
         blocked_by = e.get("blocked_by")
-        verdict = "malicious" if action == "BLOCK" or score > 0.6 else "benign"
+        if action == "BLOCK" or blocked_by:
+            verdict = "malicious"
+        elif action == "ALERT":
+            verdict = "alert"
+        else:
+            verdict = "benign"
         attack_type = _extract_attack_type(e)
         
         traffic.append({

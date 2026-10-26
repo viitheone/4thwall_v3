@@ -1,6 +1,6 @@
 import { apiClient } from './client';
 
-export type TrafficVerdict = 'benign' | 'malicious';
+export type TrafficVerdict = 'benign' | 'malicious' | 'alert' | 'suspicious';
 
 export interface SummaryStats {
   totalRequests: number;
