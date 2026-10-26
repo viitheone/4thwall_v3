@@ -21,6 +21,17 @@ router = APIRouter(prefix="/dashboard", tags=["dashboard"])
 
 DECISION_LOG_PATH = os.environ.get("DECISION_LOG", "logs/decision_log.json")
 
+# Categories excluded from the Attack Distribution pie chart as requested
+EXCLUDED_DISTRIBUTION_TYPES = {
+    "Protocol Manipulation",
+    "SQL Injection",
+    "Scanning for Vulnerable Software",
+    "Vulnerability Scan",
+    "272 - Protocol Manipulation",
+    "66 - SQL Injection",
+    "310 - Scanning for Vulnerable Software",
+}
+
 _subscribers: set[asyncio.Event] = set()
 
 def notify_dashboard_update() -> None:
@@ -182,7 +193,7 @@ def get_live_traffic():
 
 @router.get("/attack-distribution")
 def get_attack_distribution():
-    """Count by attack category and enforcement source for charts."""
+    """Count by attack category and enforcement source for charts (excluding suppressed categories)."""
     entries = _read_decision_log()
     if not entries:
         return [{"type": "None", "count": 0}]
@@ -191,13 +202,17 @@ def get_attack_distribution():
     for e in entries:
         attack = _extract_attack_type(e)
         if attack:
-            by_source[attack] += 1
+            if attack not in EXCLUDED_DISTRIBUTION_TYPES:
+                by_source[attack] += 1
         elif e.get("blocked_by") == "modsec":
             by_source["ModSec Block"] += 1
         else:
-            by_source[e.get("action", "ALLOW")] += 1
+            action = e.get("action", "ALLOW")
+            if action not in EXCLUDED_DISTRIBUTION_TYPES:
+                by_source[action] += 1
             
-    return [{"type": k, "count": v} for k, v in sorted(by_source.items())]
+    res = [{"type": k, "count": v} for k, v in sorted(by_source.items()) if k not in EXCLUDED_DISTRIBUTION_TYPES]
+    return res if res else [{"type": "None", "count": 0}]
 
 
 @router.get("/attacks-by-hour")
@@ -293,7 +308,7 @@ def _compute_dashboard_data(request: Request | None = None) -> dict:
             "aiConfidence": round(score, 2),
         })
 
-    # 3. Attack distribution
+    # 3. Attack distribution (excluding suppressed categories)
     if not entries:
         distribution = [{"type": "None", "count": 0}]
     else:
@@ -301,12 +316,16 @@ def _compute_dashboard_data(request: Request | None = None) -> dict:
         for e in entries:
             attack = _extract_attack_type(e)
             if attack:
-                by_source[attack] += 1
+                if attack not in EXCLUDED_DISTRIBUTION_TYPES:
+                    by_source[attack] += 1
             elif e.get("blocked_by") == "modsec":
                 by_source["ModSec Block"] += 1
             else:
-                by_source[e.get("action", "ALLOW")] += 1
-        distribution = [{"type": k, "count": v} for k, v in sorted(by_source.items())]
+                action = e.get("action", "ALLOW")
+                if action not in EXCLUDED_DISTRIBUTION_TYPES:
+                    by_source[action] += 1
+        res = [{"type": k, "count": v} for k, v in sorted(by_source.items()) if k not in EXCLUDED_DISTRIBUTION_TYPES]
+        distribution = res if res else [{"type": "None", "count": 0}]
 
     # 4. Attacks by hour
     by_hour = defaultdict(int)
