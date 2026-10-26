@@ -1,0 +1,201 @@
+attack_class,label_col,name,placement,target_fired,any_fired,crs_blocked,union_blocked,matched_rules
+SQL Injection,66 - SQL Injection,Classic Tautology,query_arg,True,True,True,True,942100;949110
+SQL Injection,66 - SQL Injection,Classic Tautology,post_body_with_ct,True,True,True,True,942100;949110
+SQL Injection,66 - SQL Injection,Classic Tautology,post_body_no_ct,True,True,True,True,920340;920640;949110
+SQL Injection,66 - SQL Injection,Classic Tautology,url_path,True,True,False,True,
+SQL Injection,66 - SQL Injection,Classic Tautology,cookie,False,False,True,True,942100;949110
+SQL Injection,66 - SQL Injection,Tautology Numeric,query_arg,False,True,True,True,942100;949110
+SQL Injection,66 - SQL Injection,Tautology Numeric,post_body_with_ct,False,False,True,True,942100;949110
+SQL Injection,66 - SQL Injection,Tautology Numeric,post_body_no_ct,False,False,True,True,920340;920640;949110
+SQL Injection,66 - SQL Injection,Tautology Numeric,url_path,False,False,False,False,
+SQL Injection,66 - SQL Injection,Tautology Numeric,cookie,False,False,True,True,942100;949110
+SQL Injection,66 - SQL Injection,Auth Bypass Admin,query_arg,True,True,True,True,942100;949110
+SQL Injection,66 - SQL Injection,Auth Bypass Admin,post_body_with_ct,True,True,True,True,942100;949110
+SQL Injection,66 - SQL Injection,Auth Bypass Admin,post_body_no_ct,False,True,True,True,920340;920640;949110
+SQL Injection,66 - SQL Injection,Auth Bypass Admin,url_path,False,True,False,True,
+SQL Injection,66 - SQL Injection,Auth Bypass Admin,cookie,False,False,True,True,942100;949110
+SQL Injection,66 - SQL Injection,Union Select Basic,query_arg,True,True,True,True,942100;942190;942360;949110
+SQL Injection,66 - SQL Injection,Union Select Basic,post_body_with_ct,True,True,True,True,942100;942190;942360;949110
+SQL Injection,66 - SQL Injection,Union Select Basic,post_body_no_ct,False,False,True,True,920340;920640;949110
+SQL Injection,66 - SQL Injection,Union Select Basic,url_path,False,False,False,False,
+SQL Injection,66 - SQL Injection,Union Select Basic,cookie,False,False,True,True,942100;942190;942360;949110
+SQL Injection,66 - SQL Injection,Union Null Projection,query_arg,True,True,True,True,942100;942190;942360;949110
+SQL Injection,66 - SQL Injection,Union Null Projection,post_body_with_ct,True,True,True,True,942100;942190;942360;949110
+SQL Injection,66 - SQL Injection,Union Null Projection,post_body_no_ct,True,True,True,True,920340;920640;949110
+SQL Injection,66 - SQL Injection,Union Null Projection,url_path,True,True,False,True,
+SQL Injection,66 - SQL Injection,Union Null Projection,cookie,False,False,True,True,942100;942190;942360;949110
+SQL Injection,66 - SQL Injection,Stacked Query Drop,query_arg,False,False,True,True,942100;942350;942360;949110
+SQL Injection,66 - SQL Injection,Stacked Query Drop,post_body_with_ct,True,True,True,True,942100;942350;942360;949110
+SQL Injection,66 - SQL Injection,Stacked Query Drop,post_body_no_ct,False,True,True,True,920340;920640;949110
+SQL Injection,66 - SQL Injection,Stacked Query Drop,url_path,False,True,False,True,
+SQL Injection,66 - SQL Injection,Stacked Query Drop,cookie,False,False,True,True,942100;942350;942360;949110
+SQL Injection,66 - SQL Injection,Sleep Injection,query_arg,True,True,True,True,942100;942160;949110
+SQL Injection,66 - SQL Injection,Sleep Injection,post_body_with_ct,True,True,True,True,942100;942160;949110
+SQL Injection,66 - SQL Injection,Sleep Injection,post_body_no_ct,False,True,True,True,920340;920640;949110
+SQL Injection,66 - SQL Injection,Sleep Injection,url_path,False,False,True,True,942160;949110
+SQL Injection,66 - SQL Injection,Sleep Injection,cookie,False,False,True,True,942100;942160;949110
+SQL Injection,66 - SQL Injection,MSSQL Delay,query_arg,True,True,True,True,942100;942240;942280;949110
+SQL Injection,66 - SQL Injection,MSSQL Delay,post_body_with_ct,True,True,True,True,942100;942240;942280;949110
+SQL Injection,66 - SQL Injection,MSSQL Delay,post_body_no_ct,False,True,True,True,920340;920640;949110
+SQL Injection,66 - SQL Injection,MSSQL Delay,url_path,False,False,False,False,
+SQL Injection,66 - SQL Injection,MSSQL Delay,cookie,False,False,True,True,942100;942240;942280;949110
+SQL Injection,66 - SQL Injection,Error-based Rand Group,query_arg,True,True,True,True,942100;942140;942151;942190;949110
+SQL Injection,66 - SQL Injection,Error-based Rand Group,post_body_with_ct,True,True,True,True,942100;942140;942151;942190;949110
+SQL Injection,66 - SQL Injection,Error-based Rand Group,post_body_no_ct,True,True,True,True,920340;920640;949110
+SQL Injection,66 - SQL Injection,Error-based Rand Group,url_path,True,True,False,True,
+SQL Injection,66 - SQL Injection,Error-based Rand Group,cookie,False,False,True,True,942100;942140;942151;942190;949110
+SQL Injection,66 - SQL Injection,Order By Probing,query_arg,True,True,True,True,942100;949110
+SQL Injection,66 - SQL Injection,Order By Probing,post_body_with_ct,True,True,True,True,942100;949110
+SQL Injection,66 - SQL Injection,Order By Probing,post_body_no_ct,False,False,True,True,920340;920640;949110
+SQL Injection,66 - SQL Injection,Order By Probing,url_path,False,True,False,True,
+SQL Injection,66 - SQL Injection,Order By Probing,cookie,False,False,True,True,942100;949110
+SQL Injection,66 - SQL Injection,Version Extraction,query_arg,False,True,True,True,942100;942140;942151;942190;942360;949110
+SQL Injection,66 - SQL Injection,Version Extraction,post_body_with_ct,False,True,True,True,942100;942140;942151;942190;942360;949110
+SQL Injection,66 - SQL Injection,Version Extraction,post_body_no_ct,False,False,True,True,920340;920640;949110
+SQL Injection,66 - SQL Injection,Version Extraction,url_path,False,True,False,True,
+SQL Injection,66 - SQL Injection,Version Extraction,cookie,False,False,True,True,942100;942140;942151;942190;942360;949110
+SQL Injection,66 - SQL Injection,Hash Comment Tautology,query_arg,False,True,True,True,942100;949110
+SQL Injection,66 - SQL Injection,Hash Comment Tautology,post_body_with_ct,True,True,True,True,942100;949110
+SQL Injection,66 - SQL Injection,Hash Comment Tautology,post_body_no_ct,False,False,True,True,920340;920640;949110
+SQL Injection,66 - SQL Injection,Hash Comment Tautology,url_path,False,False,False,False,
+SQL Injection,66 - SQL Injection,Hash Comment Tautology,cookie,False,False,True,True,942100;949110
+SQL Injection,66 - SQL Injection,Empty Quote Tautology,query_arg,True,True,True,True,942100;949110
+SQL Injection,66 - SQL Injection,Empty Quote Tautology,post_body_with_ct,True,True,True,True,942100;949110
+SQL Injection,66 - SQL Injection,Empty Quote Tautology,post_body_no_ct,True,True,True,True,920340;920640;949110
+SQL Injection,66 - SQL Injection,Empty Quote Tautology,url_path,False,True,False,True,
+SQL Injection,66 - SQL Injection,Empty Quote Tautology,cookie,False,False,True,True,942100;949110
+SQL Injection,66 - SQL Injection,String Comparison,query_arg,True,True,True,True,942100;949110
+SQL Injection,66 - SQL Injection,String Comparison,post_body_with_ct,True,True,True,True,942100;949110
+SQL Injection,66 - SQL Injection,String Comparison,post_body_no_ct,False,False,True,True,920340;920640;949110
+SQL Injection,66 - SQL Injection,String Comparison,url_path,True,True,False,True,
+SQL Injection,66 - SQL Injection,String Comparison,cookie,False,False,True,True,942100;949110
+SQL Injection,66 - SQL Injection,Benchmark Blind,query_arg,True,True,True,True,933160;942100;942151;942160;949110
+SQL Injection,66 - SQL Injection,Benchmark Blind,post_body_with_ct,True,True,True,True,933160;942100;942151;942160;949110
+SQL Injection,66 - SQL Injection,Benchmark Blind,post_body_no_ct,False,True,True,True,920340;920640;949110
+SQL Injection,66 - SQL Injection,Benchmark Blind,url_path,False,False,True,True,933160;942160;949110
+SQL Injection,66 - SQL Injection,Benchmark Blind,cookie,False,False,True,True,942100;942151;942160;949110
+XSS,153 - Input Data Manipulation,Script Tag Simple,query_arg,True,True,True,True,941100;941110;941160;941390;949110
+XSS,153 - Input Data Manipulation,Script Tag Simple,post_body_with_ct,True,True,True,True,941100;941110;941160;941390;949110
+XSS,153 - Input Data Manipulation,Script Tag Simple,post_body_no_ct,False,True,True,True,920340;920640;949110
+XSS,153 - Input Data Manipulation,Script Tag Simple,url_path,False,True,True,True,941110;941160;941390;949110
+XSS,153 - Input Data Manipulation,Script Tag Simple,cookie,False,False,True,True,941100;941110;941160;949110
+XSS,153 - Input Data Manipulation,Img Onerror Event,query_arg,True,True,True,True,941100;941120;941160;941390;949110
+XSS,153 - Input Data Manipulation,Img Onerror Event,post_body_with_ct,True,True,True,True,941100;941120;941160;941390;949110
+XSS,153 - Input Data Manipulation,Img Onerror Event,post_body_no_ct,False,False,True,True,920340;920640;949110
+XSS,153 - Input Data Manipulation,Img Onerror Event,url_path,False,True,True,True,941120;941160;941390;949110
+XSS,153 - Input Data Manipulation,Img Onerror Event,cookie,False,False,True,True,941100;941120;941160;949110
+XSS,153 - Input Data Manipulation,Svg Onload Event,query_arg,True,True,True,True,941100;941120;941160;941390;949110
+XSS,153 - Input Data Manipulation,Svg Onload Event,post_body_with_ct,True,True,True,True,941100;941120;941160;941390;949110
+XSS,153 - Input Data Manipulation,Svg Onload Event,post_body_no_ct,False,True,True,True,920340;920640;949110
+XSS,153 - Input Data Manipulation,Svg Onload Event,url_path,False,True,True,True,941120;941160;941390;949110
+XSS,153 - Input Data Manipulation,Svg Onload Event,cookie,False,False,True,True,941100;941120;941160;949110
+XSS,153 - Input Data Manipulation,Body Onload Cookie,query_arg,True,True,True,True,941100;941120;941160;941180;941390;949110
+XSS,153 - Input Data Manipulation,Body Onload Cookie,post_body_with_ct,False,False,True,True,941100;941120;941160;941180;941390;949110
+XSS,153 - Input Data Manipulation,Body Onload Cookie,post_body_no_ct,False,True,True,True,920340;920640;949110
+XSS,153 - Input Data Manipulation,Body Onload Cookie,url_path,False,True,True,True,941120;941160;941180;941390;949110
+XSS,153 - Input Data Manipulation,Body Onload Cookie,cookie,False,False,True,True,941100;941120;941160;941180;949110
+XSS,153 - Input Data Manipulation,Javascript URI Scheme,query_arg,True,True,True,True,941170;941210;941390;949110
+XSS,153 - Input Data Manipulation,Javascript URI Scheme,post_body_with_ct,True,True,True,True,941170;941210;941390;949110
+XSS,153 - Input Data Manipulation,Javascript URI Scheme,post_body_no_ct,False,True,True,True,920340;920640;949110
+XSS,153 - Input Data Manipulation,Javascript URI Scheme,url_path,False,True,True,True,941170;941210;941390;949110
+XSS,153 - Input Data Manipulation,Javascript URI Scheme,cookie,False,False,True,True,941170;941210;949110
+XSS,153 - Input Data Manipulation,Iframe Source Script,query_arg,True,True,True,True,941100;941160;941170;941210;941390;949110
+XSS,153 - Input Data Manipulation,Iframe Source Script,post_body_with_ct,True,True,True,True,941100;941160;941170;941210;941390;949110
+XSS,153 - Input Data Manipulation,Iframe Source Script,post_body_no_ct,False,True,True,True,920340;920640;949110
+XSS,153 - Input Data Manipulation,Iframe Source Script,url_path,False,True,True,True,941160;941170;941210;941390;949110
+XSS,153 - Input Data Manipulation,Iframe Source Script,cookie,False,False,True,True,941100;941160;941170;941210;949110
+XSS,153 - Input Data Manipulation,Autofocus Onfocus,query_arg,True,True,True,True,941100;941120;941390;949110
+XSS,153 - Input Data Manipulation,Autofocus Onfocus,post_body_with_ct,True,True,True,True,941100;941120;941390;949110
+XSS,153 - Input Data Manipulation,Autofocus Onfocus,post_body_no_ct,False,True,True,True,920340;920640;949110
+XSS,153 - Input Data Manipulation,Autofocus Onfocus,url_path,False,True,True,True,941120;941390;949110
+XSS,153 - Input Data Manipulation,Autofocus Onfocus,cookie,False,False,True,True,941100;941120;949110
+XSS,153 - Input Data Manipulation,Breakout Script Tag,query_arg,True,True,True,True,941100;941110;941160;941390;949110
+XSS,153 - Input Data Manipulation,Breakout Script Tag,post_body_with_ct,True,True,True,True,941100;941110;941160;941390;949110
+XSS,153 - Input Data Manipulation,Breakout Script Tag,post_body_no_ct,True,True,True,True,920340;920640;949110
+XSS,153 - Input Data Manipulation,Breakout Script Tag,url_path,True,True,True,True,941110;941160;941390;949110
+XSS,153 - Input Data Manipulation,Breakout Script Tag,cookie,False,False,True,True,941100;941110;941160;949110
+XSS,153 - Input Data Manipulation,Details Tag Ontoggle,query_arg,True,True,True,True,941100;941120;941390;949110
+XSS,153 - Input Data Manipulation,Details Tag Ontoggle,post_body_with_ct,True,True,True,True,941100;941120;941390;949110
+XSS,153 - Input Data Manipulation,Details Tag Ontoggle,post_body_no_ct,False,True,True,True,920340;920640;949110
+XSS,153 - Input Data Manipulation,Details Tag Ontoggle,url_path,False,True,True,True,941120;941390;949110
+XSS,153 - Input Data Manipulation,Details Tag Ontoggle,cookie,False,False,True,True,941100;941120;949110
+XSS,153 - Input Data Manipulation,A Href Javascript,query_arg,True,True,True,True,941100;941170;941210;941390;949110
+XSS,153 - Input Data Manipulation,A Href Javascript,post_body_with_ct,True,True,True,True,941100;941170;941210;941390;949110
+XSS,153 - Input Data Manipulation,A Href Javascript,post_body_no_ct,False,True,True,True,920340;920640;949110
+XSS,153 - Input Data Manipulation,A Href Javascript,url_path,False,True,True,True,941170;941210;941390;949110
+XSS,153 - Input Data Manipulation,A Href Javascript,cookie,False,False,True,True,941100;941170;941210;949110
+Path Traversal,126 - Path Traversal,Passwd 4-hop,query_arg,True,True,True,True,930100;930110;930110;930120;932160;949110
+Path Traversal,126 - Path Traversal,Passwd 4-hop,post_body_with_ct,True,True,True,True,930100;930110;930120;932160;949110
+Path Traversal,126 - Path Traversal,Passwd 4-hop,post_body_no_ct,True,True,True,True,920340;920640;949110
+Path Traversal,126 - Path Traversal,Passwd 4-hop,url_path,True,True,False,True,
+Path Traversal,126 - Path Traversal,Passwd 4-hop,cookie,False,False,True,True,930100;930110;930120;949110
+Path Traversal,126 - Path Traversal,Win.ini Windows Backslash,query_arg,True,True,True,True,930100;930110;930110;930120;949110
+Path Traversal,126 - Path Traversal,Win.ini Windows Backslash,post_body_with_ct,True,True,True,True,930100;930110;930120;949110
+Path Traversal,126 - Path Traversal,Win.ini Windows Backslash,post_body_no_ct,True,True,True,True,920340;920640;949110
+Path Traversal,126 - Path Traversal,Win.ini Windows Backslash,url_path,True,True,True,True,920440;930130;930100;930110;949110
+Path Traversal,126 - Path Traversal,Win.ini Windows Backslash,cookie,False,False,True,True,930100;930110;930120;949110
+Path Traversal,126 - Path Traversal,Double Slash Dot Traversal,query_arg,True,True,True,True,930120;932160;949110
+Path Traversal,126 - Path Traversal,Double Slash Dot Traversal,post_body_with_ct,True,True,True,True,930120;932160;949110
+Path Traversal,126 - Path Traversal,Double Slash Dot Traversal,post_body_no_ct,False,True,True,True,920340;920640;949110
+Path Traversal,126 - Path Traversal,Double Slash Dot Traversal,url_path,True,True,False,True,
+Path Traversal,126 - Path Traversal,Double Slash Dot Traversal,cookie,False,False,True,True,930120;949110
+Path Traversal,126 - Path Traversal,Encoded Traversal,query_arg,True,True,True,True,930100;930110;930120;949110
+Path Traversal,126 - Path Traversal,Encoded Traversal,post_body_with_ct,True,True,True,True,930100;930110;930120;949110
+Path Traversal,126 - Path Traversal,Encoded Traversal,post_body_no_ct,True,True,True,True,920340;920640;949110
+Path Traversal,126 - Path Traversal,Encoded Traversal,url_path,False,False,False,False,
+Path Traversal,126 - Path Traversal,Encoded Traversal,cookie,False,False,True,True,930100;949110
+Path Traversal,126 - Path Traversal,Shadow Absolute Relative,query_arg,True,True,True,True,930100;930110;930110;930120;932160;949110
+Path Traversal,126 - Path Traversal,Shadow Absolute Relative,post_body_with_ct,True,True,True,True,930100;930110;930120;932160;949110
+Path Traversal,126 - Path Traversal,Shadow Absolute Relative,post_body_no_ct,False,True,True,True,920340;920640;949110
+Path Traversal,126 - Path Traversal,Shadow Absolute Relative,url_path,True,True,False,True,
+Path Traversal,126 - Path Traversal,Shadow Absolute Relative,cookie,False,False,True,True,930100;930110;930120;949110
+Command Injection,88 - OS Command Injection,Semicolon Cat Passwd,query_arg,True,True,True,True,930120;932160;949110
+Command Injection,88 - OS Command Injection,Semicolon Cat Passwd,post_body_with_ct,True,True,True,True,930120;932160;949110
+Command Injection,88 - OS Command Injection,Semicolon Cat Passwd,post_body_no_ct,False,False,True,True,920340;920640;949110
+Command Injection,88 - OS Command Injection,Semicolon Cat Passwd,url_path,False,True,False,True,
+Command Injection,88 - OS Command Injection,Semicolon Cat Passwd,cookie,False,False,True,True,930120;949110
+Command Injection,88 - OS Command Injection,Pipe ID,query_arg,False,False,False,False,
+Command Injection,88 - OS Command Injection,Pipe ID,post_body_with_ct,False,False,False,False,
+Command Injection,88 - OS Command Injection,Pipe ID,post_body_no_ct,False,True,True,True,920340;920640;949110
+Command Injection,88 - OS Command Injection,Pipe ID,url_path,False,True,False,True,
+Command Injection,88 - OS Command Injection,Pipe ID,cookie,False,False,False,False,
+Command Injection,88 - OS Command Injection,And Whoami,query_arg,False,True,True,True,932235;932260;932340;932380;949110
+Command Injection,88 - OS Command Injection,And Whoami,post_body_with_ct,False,False,True,True,932235;932260;932340;932380;949110
+Command Injection,88 - OS Command Injection,And Whoami,post_body_no_ct,False,True,True,True,920340;920640;949110
+Command Injection,88 - OS Command Injection,And Whoami,url_path,False,True,False,True,
+Command Injection,88 - OS Command Injection,And Whoami,cookie,False,False,False,False,
+Command Injection,88 - OS Command Injection,Subshell Cat Passwd,query_arg,True,True,True,True,930120;932130;932160;949110
+Command Injection,88 - OS Command Injection,Subshell Cat Passwd,post_body_with_ct,True,True,True,True,930120;932130;932160;949110
+Command Injection,88 - OS Command Injection,Subshell Cat Passwd,post_body_no_ct,False,False,True,True,920340;920640;949110
+Command Injection,88 - OS Command Injection,Subshell Cat Passwd,url_path,False,True,False,True,
+Command Injection,88 - OS Command Injection,Subshell Cat Passwd,cookie,False,False,True,True,930120;949110
+Command Injection,88 - OS Command Injection,Backtick ID,query_arg,False,True,False,True,
+Command Injection,88 - OS Command Injection,Backtick ID,post_body_with_ct,False,False,False,False,
+Command Injection,88 - OS Command Injection,Backtick ID,post_body_no_ct,False,True,True,True,920340;920640;949110
+Command Injection,88 - OS Command Injection,Backtick ID,url_path,False,True,False,True,
+Command Injection,88 - OS Command Injection,Backtick ID,cookie,False,False,False,False,
+Command Injection,88 - OS Command Injection,Semicolon Ls Long,query_arg,False,False,True,True,932230;932125;932250;949110
+Command Injection,88 - OS Command Injection,Semicolon Ls Long,post_body_with_ct,False,False,True,True,932230;932125;932250;949110
+Command Injection,88 - OS Command Injection,Semicolon Ls Long,post_body_no_ct,False,False,True,True,920340;920640;949110
+Command Injection,88 - OS Command Injection,Semicolon Ls Long,url_path,False,True,False,True,
+Command Injection,88 - OS Command Injection,Semicolon Ls Long,cookie,False,False,False,False,
+Command Injection,88 - OS Command Injection,Windows Net User,query_arg,False,True,False,True,
+Command Injection,88 - OS Command Injection,Windows Net User,post_body_with_ct,False,False,False,False,
+Command Injection,88 - OS Command Injection,Windows Net User,post_body_no_ct,False,True,True,True,920340;920640;949110
+Command Injection,88 - OS Command Injection,Windows Net User,url_path,False,True,False,True,
+Command Injection,88 - OS Command Injection,Windows Net User,cookie,False,False,False,False,
+Command Injection,88 - OS Command Injection,Ping Probe,query_arg,False,True,True,True,932235;949110
+Command Injection,88 - OS Command Injection,Ping Probe,post_body_with_ct,False,False,True,True,932235;949110
+Command Injection,88 - OS Command Injection,Ping Probe,post_body_no_ct,False,False,True,True,920340;920640;949110
+Command Injection,88 - OS Command Injection,Ping Probe,url_path,False,False,False,False,
+Command Injection,88 - OS Command Injection,Ping Probe,cookie,False,False,False,False,
+Command Injection,88 - OS Command Injection,Or Uname,query_arg,False,False,True,True,932235;932260;949110
+Command Injection,88 - OS Command Injection,Or Uname,post_body_with_ct,False,False,True,True,932235;932260;949110
+Command Injection,88 - OS Command Injection,Or Uname,post_body_no_ct,False,False,True,True,920340;920640;949110
+Command Injection,88 - OS Command Injection,Or Uname,url_path,False,True,False,True,
+Command Injection,88 - OS Command Injection,Or Uname,cookie,False,False,False,False,
+Command Injection,88 - OS Command Injection,Curl Outbound,query_arg,False,False,True,True,932235;949110
+Command Injection,88 - OS Command Injection,Curl Outbound,post_body_with_ct,False,False,True,True,932235;949110
+Command Injection,88 - OS Command Injection,Curl Outbound,post_body_no_ct,False,True,True,True,920340;920640;949110
+Command Injection,88 - OS Command Injection,Curl Outbound,url_path,False,True,True,True,920440;949110
+Command Injection,88 - OS Command Injection,Curl Outbound,cookie,False,False,False,False,

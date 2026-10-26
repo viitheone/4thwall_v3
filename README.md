@@ -1,39 +1,42 @@
-# 4thwall – Transformer-based Hybrid WAF
+# 4thwall v3: Hardened Multi-Label Neural Web Application Firewall
+
+A hybrid, dual-layer enterprise Web Application Firewall combining **OWASP Core Rule Set (CRS v4.23)** protocol inspection with a fine-tuned **DistilBERT Multi-Label Transformer (Model v2.1b)**. 
+
+The production model is hosted on Hugging Face Hub at [**`viitheone/4thwall-waf-v2.1b`**](https://huggingface.co/viitheone/4thwall-waf-v2.1b) and is automatically pulled and verified at startup.
 
 ---
 
-A hybrid Web Application Firewall that combines **ModSecurity** (rule-based) with a **Transformer (DistilBERT)** classifier in a two-layer inline defense pipeline. The ML model is hosted on [HuggingFace Hub](https://huggingface.co/viitheone/waf-model) and downloaded automatically at startup.
-
-## Architecture
+## 1. Dual-Layer Architecture
 
 ```
                     ┌─────────────────┐
                     │     Client      │
                     └────────┬────────┘
                              │
-                       port 80
+                       port 80 (HTTP)
                              │
                              ▼
                     ┌─────────────────┐
                     │     Nginx       │
-                    │  + ModSecurity  │     Layer 1: Rule-based detection
-                    │  (CRS rules)   │
-                    └────────┬────────┘
+                    │  + ModSecurity  │     Layer 1: Protocol & Header Enforcement
+                    │  (OWASP CRS v4) │     - Strict inspection of headers & cookies
+                    └────────┬────────┘     - Dropped at perimeter if anomaly score >= 5
                              │
-                   ┌─────────┴─────────┐
-                   │                   │
-             MALICIOUS            BENIGN
-                   │                   │
-                   ▼                   ▼
-            403 Forbidden     ┌─────────────────┐
-            + log to          │   FastAPI API    │
-            access.log        │  WAFClassifier   │     Layer 2: ML-based detection
-                              │  (DistilBERT)    │
-                              └────────┬─────────┘
+                    ┌────────┴─────────┐
+                    │                  │
+              CRS BLOCKED           PASSED
+                    │                  │
+                    ▼                  ▼
+             403 Forbidden    ┌─────────────────┐
+             + log to         │   FastAPI API   │
+             access.log       │  WAFClassifier  │   Layer 2: Semantic Transformer (v2.1b)
+                              │  (DistilBERT)   │   - 13 CAPEC attack vectors
+                              └────────┬────────┘   - Calibrated per-class decision thresholds
                                        │
                              ┌─────────┴─────────┐
                              │                   │
-                       MALICIOUS            BENIGN
+                        BLOCK TIER           ALERT TIER / ALLOW
+                       (10 Vectors)          (272 / 310 / Normal)
                              │                   │
                              ▼                   ▼
                       403 Forbidden       ┌──────────────┐
@@ -43,13 +46,13 @@ A hybrid Web Application Firewall that combines **ModSecurity** (rule-based) wit
 
         ┌─────────────────┐
         │  Background:    │     Tails access.log every 60s,
-        │  modsec_block   │     logs ModSec 403s to decision_log
-        │  _logger        │     so they appear in the dashboard.
+        │  modsec_block   │     records ModSec 403s to decision_log
+        │  _logger        │     for unified dashboard visibility.
         └────────┬────────┘
                  │
                  ▼
         decision_log.json
-        (BLOCK/ALERT/ALLOW + blocked_by: modsec | ml_model)
+        (BLOCK/ALERT/ALLOW + multi-label CAPEC diagnostics)
                  │
                  ▼
         ┌─────────────────┐
@@ -58,135 +61,209 @@ A hybrid Web Application Firewall that combines **ModSecurity** (rule-based) wit
         └─────────────────┘
 ```
 
-### Request Flow
+---
 
-1. **Client → Nginx/ModSecurity (port 80)** — CRS rules evaluate the request.
-   - If **malicious** → Nginx returns `403 Forbidden` directly. The background `modsec_block_logger` picks up the 403 from `access.log` and writes it to `decision_log.json` with `blocked_by: "modsec"`.
-   - If **benign** → request is forwarded to the API.
+## 2. Model v2.1b Specifications & Benchmark Performance
 
-2. **API (ML scoring)** — The FastAPI catch-all route scores the request with the DistilBERT WAF classifier.
-   - If **malicious** (ML score > 0.9) → returns `403 Forbidden`, logs to `decision_log.json` with `blocked_by: "ml_model"`.
-   - If **medium risk** (ML score > 0.6) → logs an `ALERT` but allows the request through.
-   - If **benign** → proxies the request to DVWA and returns the response.
+Model v2.1b was trained on 363,000+ real-world requests using strict **template-disjoint grouping** to eliminate structural URI leakage, with dynamic User-Agent augmentation to prevent scanner cloaking.
 
-3. **Dashboard (port 3000)** — Reads `decision_log.json` and shows live traffic, attack distribution (ModSec vs ML blocks), and AI model status.
+- **Hugging Face Hub Repository**: [`viitheone/4thwall-waf-v2.1b`](https://huggingface.co/viitheone/4thwall-waf-v2.1b)
+- **Base Architecture**: `distilbert-base-uncased` (6 transformer layers, 768 hidden dimension, 12 heads, 66M parameters)
+- **Sequence Length**: `max_length = 256` tokens
+- **Output Classes**: 13 multi-label categories (1 Benign + 12 CAPEC attack vectors)
 
-## Prerequisites
+### Benchmark Results (Test Unique-Template: 29,996 Novel URIs)
 
-- Docker and Docker Compose
+| Benchmark Metric | Score | Operational Significance |
+|---|:---:|---|
+| **Macro-F1 (Excl. 272)** | **0.9923** | Consistent semantic exploit classification across unseen paths |
+| **Macro-F1 (All 13 Classes)** | **0.9830** | State-of-the-art multi-label attack discrimination |
+| **Micro-F1** | **0.9912** | Overall row-level categorization accuracy |
+| **Exploit Catch Rate** | **99.41%** | 22,448 / 22,582 attack rows captured |
+| **Benign False Alarm Rate (Clean)** | **0.782%** | Only 58 false alerts across 7,414 unseen benign templates |
+| **Production Benign Block Rate** | **0.737%** | Under 0.74% automated drops on test row-weighted traffic |
+| **Dual-WAF Union Catch Rate** | **99.57%** | Synergy between OWASP CRS header inspection and ML body/query inspection |
 
-For local development (training only):
-- Python 3.10+
+---
 
-## Quick Start
+## 3. Two-Tier Operational Enforcement Policy
 
-1. **Clone and enter the project:**
-   ```bash
-   cd 4thwall
-   ```
+In `4thwall_v3`, decisions are governed by a calibrated two-tier enforcement policy rather than flat binary thresholds:
 
-2. **Copy environment template:**
-   ```bash
-   copy .env.example .env
-   ```
-   Edit `.env` if you need different settings.
-
-3. **Build and start all services:**
-   ```bash
-   docker compose up --build -d
-   ```
-   On first startup, the API container downloads the model from [HuggingFace Hub](https://huggingface.co/viitheone/waf-model) (~260MB). Subsequent starts use the cached model from a Docker volume.
-
-4. **Access the stack:**
-
-   | Service            | URL                    | Notes                                                       |
-   |--------------------|------------------------|-------------------------------------------------------------|
-   | **Nginx (WAF)**    | http://localhost:80    | Entry point — all DVWA traffic goes through ModSec + ML.    |
-   | **Dashboard UI**   | http://localhost:3000  | Live traffic, attack stats, AI model status.                |
-
-   > **Note:** The API (port 8000) and DVWA (port 80 inside container) are **internal only** — not exposed to the host. All traffic must go through Nginx on port 80.
-
-5. **Useful commands:**
-   - View logs: `docker compose logs -f`
-   - Stop: `docker compose down`
-   - Rebuild API only: `docker compose build api`
-
-## Model
-
-The WAF classifier is a fine-tuned **DistilBERT** model hosted at [`viitheone/waf-model`](https://huggingface.co/viitheone/waf-model) on HuggingFace Hub.
-
-- **Pipeline:** Text Classification (binary: benign vs malicious)
-- **Format:** Safetensors
-- **Download:** Automatic at API startup via `transformers.AutoModelForSequenceClassification.from_pretrained()`
-- **Caching:** Stored in a named Docker volume (`hf_cache`) to persist across container restarts
-
-To use a **local model** instead (e.g. after retraining), set `MODEL_PATH` to a local directory:
-```env
-MODEL_PATH=./models/waf_model
+```mermaid
+graph TD
+    REQ[Incoming HTTP Request] --> SER[Canonical serialize_request]
+    SER --> INF[DistilBERT v2.1b Forward Pass]
+    INF --> THRESH[Apply Calibrated Thresholds]
+    THRESH --> DECISION{Which Classes Exceeded Threshold?}
+    
+    DECISION -->|Any of the 10 BLOCK Classes| BLOCK[ACTION: Automated Inline BLOCK - HTTP 403]
+    DECISION -->|Only 272 or 310 Fired| ALERT[ACTION: Passive ALERT / Log to SIEM / Rate Limit]
+    DECISION -->|No Attack Label Fired| ALLOW[ACTION: ALLOW / Proxy to Upstream API]
 ```
 
-## Training
+### 1. BLOCK Tier (10 Automated Blocking Classes $\rightarrow$ HTTP 403)
+Immediate automated drop for code execution and data breach vectors:
+1. `242 - Code Injection` (XSS, PHP code execution)
+2. `88 - OS Command Injection` (Shell commands, includes merged CAPEC-248)
+3. `126 - Path Traversal` (Directory traversal, `/etc/passwd` inclusion)
+4. `66 - SQL Injection` (SQL syntax manipulation, blind injection)
+5. `16 - Dictionary-based Password Attack` (Credential stuffing signatures)
+6. `153 - Input Data Manipulation` (Data tampering, sanitization evasion)
+7. `274 - HTTP Verb Tampering` (Unauthorized HTTP verbs: `TRACK`, `DEBUG`, `PUT`)
+8. `194 - Fake the Source of Data` (Header spoofing, SSRF proxy injection)
+9. `34 - HTTP Response Splitting` (CRLF injection, header splitting)
+10. `33 - HTTP Request Smuggling` (TE/CL desynchronization attacks)
 
-1. Place your training CSV in `data/` (columns: `method`, `path` or `url`, `query` or `args`, `status`, `user_agent`, `request_time`, `label` with label 0=benign, 1=malicious).
+### 2. ALERT Tier (2 Passive Alerting Classes)
+Passed to upstream with security alert logged:
+1. `272 - Protocol Manipulation` (Calibrated $T=0.99$ to neutralize crawler false alarm bursts)
+2. `310 - Scanning for Vulnerable Software` (Reconnaissance tools like `sqlmap`, `nikto`)
 
-2. Install dependencies locally:
-   ```bash
-   python -m venv .venv
-   .venv\Scripts\activate   # Windows
-   # source .venv/bin/activate   # Linux/macOS
-   pip install -r requirements.txt
+---
+
+## 4. Calibrated Decision Thresholds (`thresholds.json`)
+
+Do **not** use default $T=0.50$ thresholds. Using $0.50$ produces false alarms on traffic bursts. The following validation-calibrated thresholds are enforced at runtime:
+
+| Index | CAPEC Class Name | Threshold ($T_j$) | Enforcement Tier | Operational Rationale |
+|:---:|---|:---:|:---:|---|
+| 0 | `000 - Normal` | **0.55** | Baseline | Neutral benign traffic gate |
+| 1 | `272 - Protocol Manipulation` | **0.99** | **ALERT** | Collapses 36,109 false alarms on headerless crawler bursts |
+| 2 | `242 - Code Injection` | **0.65** | **BLOCK** | Captures XSS and PHP execution exploits |
+| 3 | `88 - OS Command Injection` | **0.90** | **BLOCK** | Strict shell execution defense |
+| 4 | `126 - Path Traversal` | **0.90** | **BLOCK** | Eliminates benign path lookalike drops |
+| 5 | `66 - SQL Injection` | **0.70** | **BLOCK** | 99.2% recall with 0.996 precision |
+| 6 | `16 - Dictionary-based Password Attack` | **0.60** | **BLOCK** | Brute-force credential stuffing defense |
+| 7 | `310 - Scanning for Vulnerable Software` | **0.55** | **ALERT** | Reconnaissance detection |
+| 8 | `153 - Input Data Manipulation` | **0.65** | **BLOCK** | Parameter tampering detection |
+| 9 | `274 - HTTP Verb Tampering` | **0.90** | **BLOCK** | Unauthorized HTTP method rejection |
+| 10 | `194 - Fake the Source of Data` | **0.90** | **BLOCK** | Header spoofing and SSRF proxy defense |
+| 11 | `34 - HTTP Response Splitting` | **0.60** | **BLOCK** | CRLF injection defense |
+| 12 | `33 - HTTP Request Smuggling` | **0.95** | **BLOCK** | 100% precision on desync payloads |
+
+---
+
+## 5. Input Serialization Protocol
+
+Requests are converted into structured markup tokens before tokenization:
+```
+[METHOD] {method} [PATH] {path} [UA] {user_agent} [CT] {content_type} [BODY] {body}
+```
+1. **User-Agent Fallback**: Empty or missing User-Agents automatically default to `Mozilla/5.0...`. Omitting this causes the model to flag traffic as `310 - Vulnerability Scanning`.
+2. **Body Truncation**: Bodies are truncated to 500 characters to prevent DistilBERT token starvation of path and query segments.
+3. **Transport Encoding**: Parameters remain transport-encoded (`/?id=1%27%20OR%201=1`).
+
+---
+
+## 6. Quick Start
+
+### Prerequisites
+- Docker & Docker Compose
+- Python 3.10+ (for local development or testing)
+
+### 1. Copy Environment Configuration
+```bash
+copy .env.example .env
+```
+Default `.env` settings:
+```env
+MODEL_PATH=viitheone/4thwall-waf-v2.1b
+TORCH_THREADS=4
+DVWA_URL=http://dvwa:80
+```
+
+### 2. Build and Start the Stack
+```bash
+docker compose up --build -d
+```
+On startup, the API downloads the weights from [HuggingFace Hub](https://huggingface.co/viitheone/4thwall-waf-v2.1b) (~265MB) and caches them in the `hf_cache` Docker volume.
+
+### 3. Service Access Matrix
+| Service | URL | Role |
+|---|---|---|
+| **Nginx WAF Proxy** | `http://localhost:80` | Production entry point (OWASP CRS + Inline ML) |
+| **React Dashboard** | `http://localhost:3000` | Real-time traffic monitoring & attack analytics |
+| **API Healthcheck** | `http://localhost:8000/health` | Model status, F1 metrics, device info |
+
+---
+
+## 7. API Reference
+
+### `POST /inspect` (Structured Component Scoring)
+```bash
+curl -X POST "http://localhost:8000/inspect" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "method": "POST",
+    "path": "/login.php",
+    "user_agent": "Mozilla/5.0",
+    "content_type": "application/x-www-form-urlencoded",
+    "body": "username=admin%27+OR+1%3D1--"
+  }'
+```
+**Response**:
+```json
+{
+  "score": 0.9981,
+  "label": "malicious",
+  "confidence": 0.9981,
+  "decision": "BLOCK",
+  "is_attack": true,
+  "firing_labels": ["66 - SQL Injection"],
+  "blocking_labels": ["66 - SQL Injection"],
+  "alert_labels": [],
+  "primary_attack": "66 - SQL Injection",
+  "serialized_text": "[METHOD] POST [PATH] /login.php [UA] Mozilla/5.0 [CT] application/x-www-form-urlencoded [BODY] username=admin%27+OR+1%3D1--",
+  "probabilities": {
+    "000 - Normal": 0.0008,
+    "66 - SQL Injection": 0.9981,
+    "242 - Code Injection": 0.0012,
+    "126 - Path Traversal": 0.0004
+  }
+}
+```
+
+### `POST /score` (Serialized String Scoring)
+```bash
+curl -X POST "http://localhost:8000/score" \
+  -H "Content-Type: application/json" \
+  -d '{"request_text": "[METHOD] GET [PATH] /?id=1%27%20OR%201=1-- [UA] Mozilla/5.0"}'
+```
+
+### `POST /score_batch` (High-Throughput Batch Scoring)
+Scores an array of serialized strings in a single batched tensor operation.
+
+---
+
+## 8. Local Model vs Hugging Face Hub
+
+You can toggle between the Hugging Face Hub version and local frozen checkpoints via `MODEL_PATH`:
+
+1. **Hugging Face Hub (Default)**:
+   ```env
+   MODEL_PATH=viitheone/4thwall-waf-v2.1b
+   ```
+2. **Local Hugging Face Directory**:
+   ```env
+   MODEL_PATH=models/huggingface_model
+   ```
+3. **Local Frozen Checkpoint**:
+   ```env
+   MODEL_PATH=models/v2_1b
    ```
 
-3. Run training:
-   ```bash
-   python -m ml.train --data_path data/train.csv
-   ```
-   Optional: `--output_dir ./models/waf_model` and `--epochs 3`.
+---
 
-4. Model and tokenizer are saved under `MODEL_SAVE_PATH` (default `./models/waf_model`). Best model is chosen by validation F1.
+## 9. Verification & Automated Testing
 
-5. To use your retrained model, either:
-   - Upload it to HuggingFace Hub and update `MODEL_PATH` in `.env`
-   - Or set `MODEL_PATH=./models/waf_model` and mount the models directory in `docker-compose.yml`
-
-## Policy Settings
-
-| Condition                | Action    | Reason                       |
-|--------------------------|-----------|------------------------------|
-| ModSecurity blocked      | **BLOCK** | ModSecurity rule triggered   |
-| ML score > 0.9           | **BLOCK** | High ML risk score           |
-| ML score > 0.6           | **ALERT** | Medium ML risk score         |
-| Otherwise                | **ALLOW** | Low risk                     |
-
-## Decision Logging
-
-Every request that passes through the system is logged to `logs/decision_log.json` with the following fields:
-
-| Field                 | Description                                                    |
-|-----------------------|----------------------------------------------------------------|
-| `timestamp`           | ISO 8601 timestamp                                             |
-| `request_text`        | Serialized request (method, path, query, status, UA, time)     |
-| `modsecurity_blocked` | Whether ModSecurity blocked the request                        |
-| `ml_score`            | ML model risk score (0.0–1.0)                                  |
-| `action`              | Final action: `BLOCK`, `ALERT`, or `ALLOW`                     |
-| `reason`              | Human-readable reason for the action                           |
-| `blocked_by`          | Which layer blocked: `"modsec"`, `"ml_model"`, or `null`       |
-
-## Troubleshooting
-
-- **503 on /score**: Model failed to download from HuggingFace Hub. Check internet connectivity and that `MODEL_PATH` is correct (default: `viitheone/waf-model`).
-- **Import errors**: Run from project root and ensure `requirements.txt` is installed.
-- **Empty dashboard**: Traffic must go through **http://localhost:80** (Nginx WAF). ModSec blocks appear in the dashboard with ~60 second delay (background log tailer interval).
-- **Port 80 not loading**: Run `docker compose ps` — all services should be `Up`. The CRS nginx image listens on **8080 inside the container**; compose maps **host `80` → container `8080`**.
-- **Nginx `Restarting` + bind-mount conf**: If `nginx/conf.d/99-waf-host-access-log.conf` did not exist the first time you ran Compose, Docker may have created a **directory** with that name. Remove that folder, ensure the path is a **regular file**, then `docker compose up -d --force-recreate nginx`.
-- **"WAF doesn't block"**: ModSecurity blocks at the Nginx layer (403). The ML model blocks inline in the API for requests that pass ModSec. Test with: `curl "http://localhost:80/?id=1' OR 1=1--"`.
-- **Docker build timeout / huge downloads**: The API Dockerfile installs **CPU-only** PyTorch from PyTorch's wheel index. If a build times out, retry with `docker compose build --no-cache api`.
-- **Dashboard can't reach API**: The frontend proxies `/api` to the API container over the Docker network. Run `docker compose ps` to confirm both are running.
-
-## Known Issues
-
-- No online learning; model is fixed after training.
-- ModSec blocks appear in the dashboard with ~60s delay (access log tailing interval).
-- Docker Compose sets `MODSEC_RULE_ENGINE=On`; local `nginx/nginx.conf` samples may still be detection-only if running Nginx manually.
-- Policy engine has exactly the specified rules (ModSec block, then ML thresholds 0.9 / 0.6).
-
+Execute the automated test suite:
+```bash
+python -m pytest tests/test_model_v2_1b.py -v
+```
+Verifies:
+- Serialization and header normalization
+- Two-tier policy logic (10 BLOCK vectors, 2 ALERT vectors, benign ALLOW)
+- Local model inference (`models/huggingface_model`)
+- Hugging Face Hub inference (`viitheone/4thwall-waf-v2.1b`)
+- FastAPI endpoints (`/health`, `/score`, `/inspect`, `/dashboard`)

@@ -1,6 +1,5 @@
 import {
   useEffect,
-  useCallback,
   useMemo,
   useState,
 } from 'react';
@@ -78,6 +77,17 @@ const ATTACK_COLORS = [
   '#ec4899',
 ];
 
+// Suppressed categories excluded from the Attack Distribution pie chart
+const EXCLUDED_ATTACK_TYPES = new Set([
+  'Protocol Manipulation',
+  'SQL Injection',
+  'Scanning for Vulnerable Software',
+  'Vulnerability Scan',
+  '272 - Protocol Manipulation',
+  '66 - SQL Injection',
+  '310 - Scanning for Vulnerable Software',
+]);
+
 const formatHourString = (val: string) => {
   if (!val || typeof val !== 'string' || !val.includes('T')) return val;
   const [datePart, hourPart] = val.split('T');
@@ -98,6 +108,11 @@ function App() {
   const maxAttempts = useMemo(
     () => topAttackers.reduce((max, a) => Math.max(max, a.attempts), 0),
     [topAttackers],
+  );
+
+  const filteredDistribution = useMemo(
+    () => distribution.filter((item) => !EXCLUDED_ATTACK_TYPES.has(item.type)),
+    [distribution],
   );
 
   return (
@@ -187,13 +202,13 @@ function App() {
             <h2 className="text-sm font-semibold text-panel">Attack Distribution</h2>
           </div>
           <div className="h-56">
-            {distribution.length > 0 ? (
+            {filteredDistribution.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
                     dataKey="count"
                     nameKey="type"
-                    data={distribution}
+                    data={filteredDistribution}
                     innerRadius={50}
                     outerRadius={80}
                     paddingAngle={3}
@@ -209,7 +224,7 @@ function App() {
                       );
                     }}
                   >
-                    {distribution.map((_, index) => (
+                    {filteredDistribution.map((_, index) => (
                       <Cell key={index} fill={ATTACK_COLORS[index % ATTACK_COLORS.length]} />
                     ))}
                   </Pie>
@@ -321,4 +336,3 @@ function App() {
 }
 
 export default App;
-

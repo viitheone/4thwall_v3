@@ -1,0 +1,875 @@
+{
+  "statistics": {
+    "total_normal": 7414,
+    "normal_with_markers": 2548,
+    "clean_normal": 4866,
+    "crs_on_marker_count": 854,
+    "crs_on_marker_rate": 0.33516483516483514,
+    "model_all12_on_marker_count": 6,
+    "model_all12_on_marker_rate": 0.002354788069073783,
+    "model_no272_on_marker_count": 1,
+    "model_no272_on_marker_rate": 0.0003924646781789639,
+    "crs_on_clean_count": 23,
+    "crs_on_clean_rate": 0.004726674886970818,
+    "model_all12_on_clean_count": 66,
+    "model_all12_on_clean_rate": 0.013563501849568433,
+    "model_no272_on_clean_count": 57,
+    "model_no272_on_clean_rate": 0.011713933415536375
+  },
+  "sample_crs_flagged_marker_rows": [
+    {
+      "ut_idx": 5486,
+      "dataset_idx": 103629,
+      "method": "GET",
+      "url": "/blog/index.php/%22%3E%3C%21--%23EXEC+cmd%3D%22ls+%2F%22--%3E%3C/tomas/feed",
+      "body": "",
+      "decoded_text": "GET /blog/index.php/\"><!--#EXEC+cmd=\"ls+/\"--></tomas/feed ",
+      "has_marker": true,
+      "crs_blocked": true,
+      "matched_rules": "941180;949110",
+      "model_all12_fired": false,
+      "model_no272_fired": false,
+      "firing_labels": [],
+      "firing_scores": {}
+    },
+    {
+      "ut_idx": 20134,
+      "dataset_idx": 374572,
+      "method": "GET",
+      "url": "/blog/index.php+%2F+sleep%2815%29+/2020/04/04/labore-pariatur-amet-quam",
+      "body": "",
+      "decoded_text": "GET /blog/index.php+/+sleep(15)+/2020/04/04/labore-pariatur-amet-quam ",
+      "has_marker": true,
+      "crs_blocked": true,
+      "matched_rules": "942160;949110",
+      "model_all12_fired": false,
+      "model_no272_fired": false,
+      "firing_labels": [],
+      "firing_scores": {}
+    },
+    {
+      "ut_idx": 5665,
+      "dataset_idx": 106756,
+      "method": "GET",
+      "url": "/%3C%21--%23EXEC+cmd%3D%22ls+%2F%22--%3E/wp-content/uploads/2020/04/c88a75c6-b439-3e82-99dd-0aca7c568b15-1024x682.jpg",
+      "body": "",
+      "decoded_text": "GET /<!--#EXEC+cmd=\"ls+/\"-->/wp-content/uploads/2020/04/c88a75c6-b439-3e82-99dd-0aca7c568b15-1024x682.jpg ",
+      "has_marker": true,
+      "crs_blocked": true,
+      "matched_rules": "941180;949110",
+      "model_all12_fired": false,
+      "model_no272_fired": false,
+      "firing_labels": [],
+      "firing_scores": {}
+    },
+    {
+      "ut_idx": 5680,
+      "dataset_idx": 107140,
+      "method": "GET",
+      "url": "/blog/wp-includes/%3C%21--%23EXEC+cmd%3D%22ls+%2F%22--%3E/comment-reply.min.js?ver=4.9.5",
+      "body": "",
+      "decoded_text": "GET /blog/wp-includes/<!--#EXEC+cmd=\"ls+/\"-->/comment-reply.min.js?ver=4.9.5 ",
+      "has_marker": true,
+      "crs_blocked": true,
+      "matched_rules": "941180;949110",
+      "model_all12_fired": false,
+      "model_no272_fired": false,
+      "firing_labels": [],
+      "firing_scores": {}
+    },
+    {
+      "ut_idx": 21868,
+      "dataset_idx": 400869,
+      "method": "GET",
+      "url": "/blog/wp-includes%27+%2F+sleep%2815%29+%2F+%27/css/buttons.min.css?ver=4.9.5",
+      "body": "",
+      "decoded_text": "GET /blog/wp-includes'+/+sleep(15)+/+'/css/buttons.min.css?ver=4.9.5 ",
+      "has_marker": true,
+      "crs_blocked": true,
+      "matched_rules": "942160;949110",
+      "model_all12_fired": false,
+      "model_no272_fired": false,
+      "firing_labels": [],
+      "firing_scores": {}
+    },
+    {
+      "ut_idx": 20672,
+      "dataset_idx": 382824,
+      "method": "GET",
+      "url": "/blog/index.php/my-account/edit-profile/%7B%7B+data.url%27+%2F+sleep%2815%29+%2F+%27",
+      "body": "",
+      "decoded_text": "GET /blog/index.php/my-account/edit-profile/{{+data.url'+/+sleep(15)+/+' ",
+      "has_marker": true,
+      "crs_blocked": true,
+      "matched_rules": "942160;949110",
+      "model_all12_fired": false,
+      "model_no272_fired": false,
+      "firing_labels": [],
+      "firing_scores": {}
+    },
+    {
+      "ut_idx": 5822,
+      "dataset_idx": 111398,
+      "method": "GET",
+      "url": "/%27%22%3Cscript%3Ealert%281%29%3B%3C%2Fscript%3E/index.php/tag/autem-vel-nostrum-enim",
+      "body": "",
+      "decoded_text": "GET /'\"<script>alert(1);</script>/index.php/tag/autem-vel-nostrum-enim ",
+      "has_marker": true,
+      "crs_blocked": true,
+      "matched_rules": "941110;941160;941390;949110",
+      "model_all12_fired": false,
+      "model_no272_fired": false,
+      "firing_labels": [],
+      "firing_scores": {}
+    },
+    {
+      "ut_idx": 5841,
+      "dataset_idx": 111752,
+      "method": "GET",
+      "url": "/blog/index.php/%27%22%3Cscript%3Ealert%281%29%3B%3C%2Fscript%3E/oembed/1.0/embed?format=xml&url=http%3A%2F%2Ftest-site.com%2Fblog%2Findex.php%2Fvitae-dolores-quidem-possimus-aut-voluptatibus%2F",
+      "body": "",
+      "decoded_text": "GET /blog/index.php/'\"<script>alert(1);</script>/oembed/1.0/embed?format=xml&url=http://test-site.com/blog/index.php/vitae-dolores-quidem-possimus-aut-voluptatibus/ ",
+      "has_marker": true,
+      "crs_blocked": true,
+      "matched_rules": "941110;941160;941390;949110",
+      "model_all12_fired": false,
+      "model_no272_fired": false,
+      "firing_labels": [],
+      "firing_scores": {}
+    },
+    {
+      "ut_idx": 19890,
+      "dataset_idx": 370242,
+      "method": "GET",
+      "url": "/blog/index.php%22+%2F+sleep%2815%29+%2F+%22",
+      "body": "",
+      "decoded_text": "GET /blog/index.php\"+/+sleep(15)+/+\" ",
+      "has_marker": true,
+      "crs_blocked": true,
+      "matched_rules": "942160;949110",
+      "model_all12_fired": false,
+      "model_no272_fired": false,
+      "firing_labels": [],
+      "firing_scores": {}
+    },
+    {
+      "ut_idx": 21931,
+      "dataset_idx": 402093,
+      "method": "GET",
+      "url": "/blog/wp-includes%27+%2F+sleep%2815%29+%2F+%27/js/jquery/jquery-migrate.min.js?ver=1.4.1",
+      "body": "",
+      "decoded_text": "GET /blog/wp-includes'+/+sleep(15)+/+'/js/jquery/jquery-migrate.min.js?ver=1.4.1 ",
+      "has_marker": true,
+      "crs_blocked": true,
+      "matched_rules": "942160;949110",
+      "model_all12_fired": false,
+      "model_no272_fired": false,
+      "firing_labels": [],
+      "firing_scores": {}
+    },
+    {
+      "ut_idx": 21566,
+      "dataset_idx": 396781,
+      "method": "GET",
+      "url": "/blog/wp-content%27+%2F+sleep%2815%29+%2F+%27/uploads/2020/04/48cf902e-a565-3e60-8512-c19e2e6a72db-300x200.jpg",
+      "body": "",
+      "decoded_text": "GET /blog/wp-content'+/+sleep(15)+/+'/uploads/2020/04/48cf902e-a565-3e60-8512-c19e2e6a72db-300x200.jpg ",
+      "has_marker": true,
+      "crs_blocked": true,
+      "matched_rules": "942160;949110",
+      "model_all12_fired": false,
+      "model_no272_fired": false,
+      "firing_labels": [],
+      "firing_scores": {}
+    },
+    {
+      "ut_idx": 21255,
+      "dataset_idx": 391062,
+      "method": "GET",
+      "url": "/blog/wp-content/plugins/user-registration%27+%2F+sleep%2815%29+%2F+%27",
+      "body": "",
+      "decoded_text": "GET /blog/wp-content/plugins/user-registration'+/+sleep(15)+/+' ",
+      "has_marker": true,
+      "crs_blocked": true,
+      "matched_rules": "942160;949110",
+      "model_all12_fired": false,
+      "model_no272_fired": false,
+      "firing_labels": [],
+      "firing_scores": {}
+    },
+    {
+      "ut_idx": 21559,
+      "dataset_idx": 396709,
+      "method": "GET",
+      "url": "/blog/wp-content+%2F+sleep%2815%29+/uploads/2020/04/40ce1958-204f-369e-bc5a-32d63da4963f.png",
+      "body": "",
+      "decoded_text": "GET /blog/wp-content+/+sleep(15)+/uploads/2020/04/40ce1958-204f-369e-bc5a-32d63da4963f.png ",
+      "has_marker": true,
+      "crs_blocked": true,
+      "matched_rules": "942160;949110",
+      "model_all12_fired": false,
+      "model_no272_fired": false,
+      "firing_labels": [],
+      "firing_scores": {}
+    },
+    {
+      "ut_idx": 5877,
+      "dataset_idx": 112556,
+      "method": "GET",
+      "url": "/blog/wp-content/plugins/user-registration/%27%22%3Cscript%3Ealert%281%29%3B%3C%2Fscript%3E/js/jquery-tiptip",
+      "body": "",
+      "decoded_text": "GET /blog/wp-content/plugins/user-registration/'\"<script>alert(1);</script>/js/jquery-tiptip ",
+      "has_marker": true,
+      "crs_blocked": true,
+      "matched_rules": "941110;941160;941390;949110",
+      "model_all12_fired": false,
+      "model_no272_fired": false,
+      "firing_labels": [],
+      "firing_scores": {}
+    },
+    {
+      "ut_idx": 5874,
+      "dataset_idx": 112431,
+      "method": "GET",
+      "url": "/blog/wp-content/%27%22%3Cscript%3Ealert%281%29%3B%3C%2Fscript%3E/user-registration/assets/js/frontend/user-registration.min.js?ver=1.8.2.1",
+      "body": "",
+      "decoded_text": "GET /blog/wp-content/'\"<script>alert(1);</script>/user-registration/assets/js/frontend/user-registration.min.js?ver=1.8.2.1 ",
+      "has_marker": true,
+      "crs_blocked": true,
+      "matched_rules": "941110;941160;941390;949110",
+      "model_all12_fired": false,
+      "model_no272_fired": false,
+      "firing_labels": [],
+      "firing_scores": {}
+    },
+    {
+      "ut_idx": 20419,
+      "dataset_idx": 380261,
+      "method": "GET",
+      "url": "/blog/index.php%27+%2F+sleep%2815%29+%2F+%27/et-vel-qui-explicabo-autem-rerum-nisi/embed",
+      "body": "",
+      "decoded_text": "GET /blog/index.php'+/+sleep(15)+/+'/et-vel-qui-explicabo-autem-rerum-nisi/embed ",
+      "has_marker": true,
+      "crs_blocked": true,
+      "matched_rules": "942160;949110",
+      "model_all12_fired": false,
+      "model_no272_fired": false,
+      "firing_labels": [],
+      "firing_scores": {}
+    },
+    {
+      "ut_idx": 20165,
+      "dataset_idx": 375174,
+      "method": "GET",
+      "url": "/blog/index.php/2020/04+%2F+sleep%2815%29+/04/nihil-tenetur-et-ad-in-dolores/feed",
+      "body": "",
+      "decoded_text": "GET /blog/index.php/2020/04+/+sleep(15)+/04/nihil-tenetur-et-ad-in-dolores/feed ",
+      "has_marker": true,
+      "crs_blocked": true,
+      "matched_rules": "942160;949110",
+      "model_all12_fired": false,
+      "model_no272_fired": false,
+      "firing_labels": [],
+      "firing_scores": {}
+    },
+    {
+      "ut_idx": 21001,
+      "dataset_idx": 387219,
+      "method": "GET",
+      "url": "/blog/index.php/search%27+%2F+sleep%2815%29+%2F+%27/feed/feed",
+      "body": "",
+      "decoded_text": "GET /blog/index.php/search'+/+sleep(15)+/+'/feed/feed ",
+      "has_marker": true,
+      "crs_blocked": true,
+      "matched_rules": "942160;949110",
+      "model_all12_fired": false,
+      "model_no272_fired": false,
+      "firing_labels": [],
+      "firing_scores": {}
+    },
+    {
+      "ut_idx": 20037,
+      "dataset_idx": 373169,
+      "method": "GET",
+      "url": "/blog/index.php/2020/04%22+%2F+sleep%2815%29+%2F+%22/04/explicabo-qui-fuga-distinctio-dolores-voluptatibus-sit/feed",
+      "body": "",
+      "decoded_text": "GET /blog/index.php/2020/04\"+/+sleep(15)+/+\"/04/explicabo-qui-fuga-distinctio-dolores-voluptatibus-sit/feed ",
+      "has_marker": true,
+      "crs_blocked": true,
+      "matched_rules": "942160;949110",
+      "model_all12_fired": false,
+      "model_no272_fired": false,
+      "firing_labels": [],
+      "firing_scores": {}
+    },
+    {
+      "ut_idx": 22187,
+      "dataset_idx": 406392,
+      "method": "GET",
+      "url": "/blog%25%27%3BSELECT+SLEEP%285%29%23",
+      "body": "",
+      "decoded_text": "GET /blog%';SELECT+SLEEP(5)# ",
+      "has_marker": true,
+      "crs_blocked": true,
+      "matched_rules": "942160;949110",
+      "model_all12_fired": false,
+      "model_no272_fired": false,
+      "firing_labels": [],
+      "firing_scores": {}
+    },
+    {
+      "ut_idx": 5487,
+      "dataset_idx": 103638,
+      "method": "GET",
+      "url": "/blog/index.php/%22%3E%3C%21--%23EXEC+cmd%3D%22ls+%2F%22--%3E%3C/vbechtelar",
+      "body": "",
+      "decoded_text": "GET /blog/index.php/\"><!--#EXEC+cmd=\"ls+/\"--></vbechtelar ",
+      "has_marker": true,
+      "crs_blocked": true,
+      "matched_rules": "941180;949110",
+      "model_all12_fired": false,
+      "model_no272_fired": false,
+      "firing_labels": [],
+      "firing_scores": {}
+    },
+    {
+      "ut_idx": 20900,
+      "dataset_idx": 385729,
+      "method": "GET",
+      "url": "/blog/index.php/qui-enim-sunt-minima-sit+%2F+sleep%2815%29+/feed",
+      "body": "",
+      "decoded_text": "GET /blog/index.php/qui-enim-sunt-minima-sit+/+sleep(15)+/feed ",
+      "has_marker": true,
+      "crs_blocked": true,
+      "matched_rules": "942160;949110",
+      "model_all12_fired": false,
+      "model_no272_fired": false,
+      "firing_labels": [],
+      "firing_scores": {}
+    },
+    {
+      "ut_idx": 5808,
+      "dataset_idx": 110852,
+      "method": "GET",
+      "url": "/blog/%27%22%3Cscript%3Ealert%281%29%3B%3C%2Fscript%3E/qui-enim-sunt-minima-sit/feed",
+      "body": "",
+      "decoded_text": "GET /blog/'\"<script>alert(1);</script>/qui-enim-sunt-minima-sit/feed ",
+      "has_marker": true,
+      "crs_blocked": true,
+      "matched_rules": "941110;941160;941390;949110",
+      "model_all12_fired": false,
+      "model_no272_fired": false,
+      "firing_labels": [],
+      "firing_scores": {}
+    },
+    {
+      "ut_idx": 21154,
+      "dataset_idx": 389485,
+      "method": "GET",
+      "url": "/blog/index.php/vitae-dolores-quidem-possimus-aut-voluptatibus+%2F+sleep%2815%29+/feed",
+      "body": "",
+      "decoded_text": "GET /blog/index.php/vitae-dolores-quidem-possimus-aut-voluptatibus+/+sleep(15)+/feed ",
+      "has_marker": true,
+      "crs_blocked": true,
+      "matched_rules": "942160;949110",
+      "model_all12_fired": false,
+      "model_no272_fired": false,
+      "firing_labels": [],
+      "firing_scores": {}
+    },
+    {
+      "ut_idx": 21851,
+      "dataset_idx": 400635,
+      "method": "GET",
+      "url": "/blog%27+%2F+sleep%2815%29+%2F+%27/wp-includes",
+      "body": "",
+      "decoded_text": "GET /blog'+/+sleep(15)+/+'/wp-includes ",
+      "has_marker": true,
+      "crs_blocked": true,
+      "matched_rules": "942160;949110",
+      "model_all12_fired": false,
+      "model_no272_fired": false,
+      "firing_labels": [],
+      "firing_scores": {}
+    }
+  ],
+  "sample_model_flagged_clean_rows": [
+    {
+      "ut_idx": 28284,
+      "dataset_idx": 525604,
+      "method": "GET",
+      "url": "/blog/wp-content/uploads/2020/04/7c651b11-3631-3f9e-b728-dc11efe811c7~",
+      "body": "",
+      "decoded_text": "GET /blog/wp-content/uploads/2020/04/7c651b11-3631-3f9e-b728-dc11efe811c7~ ",
+      "has_marker": false,
+      "crs_blocked": false,
+      "matched_rules": "nan",
+      "model_all12_fired": true,
+      "model_no272_fired": false,
+      "firing_labels": [
+        "272 - Protocol Manipulation"
+      ],
+      "firing_scores": {
+        "272 - Protocol Manipulation": 0.9960440397262573
+      }
+    },
+    {
+      "ut_idx": 29075,
+      "dataset_idx": 541266,
+      "method": "OPTIONS",
+      "url": "/blog/wp-admin/images",
+      "body": "",
+      "decoded_text": "OPTIONS /blog/wp-admin/images ",
+      "has_marker": false,
+      "crs_blocked": false,
+      "matched_rules": "nan",
+      "model_all12_fired": true,
+      "model_no272_fired": true,
+      "firing_labels": [
+        "194 - Fake the Source of Data"
+      ],
+      "firing_scores": {
+        "194 - Fake the Source of Data": 0.9410845041275024
+      }
+    },
+    {
+      "ut_idx": 196,
+      "dataset_idx": 3986,
+      "method": "GET",
+      "url": "/blog/index.php/my-account/lost-password/?reset-link-sent=true",
+      "body": "",
+      "decoded_text": "GET /blog/index.php/my-account/lost-password/?reset-link-sent=true ",
+      "has_marker": false,
+      "crs_blocked": false,
+      "matched_rules": "nan",
+      "model_all12_fired": true,
+      "model_no272_fired": true,
+      "firing_labels": [
+        "66 - SQL Injection"
+      ],
+      "firing_scores": {
+        "66 - SQL Injection": 0.7175530195236206
+      }
+    },
+    {
+      "ut_idx": 22043,
+      "dataset_idx": 404671,
+      "method": "GET",
+      "url": "/blog/wp-includes/js/wp-embed.min.js?ver=4.9.5",
+      "body": "",
+      "decoded_text": "GET /blog/wp-includes/js/wp-embed.min.js?ver=4.9.5 ",
+      "has_marker": false,
+      "crs_blocked": false,
+      "matched_rules": "nan",
+      "model_all12_fired": true,
+      "model_no272_fired": true,
+      "firing_labels": [
+        "66 - SQL Injection"
+      ],
+      "firing_scores": {
+        "66 - SQL Injection": 0.8580992221832275
+      }
+    },
+    {
+      "ut_idx": 230,
+      "dataset_idx": 4819,
+      "method": "GET",
+      "url": "%c0%2e%c0%2e/%c0%2e%c0%2e/%c0%2e%c0%2e/%c0%2e%c0%2e/boot.ini",
+      "body": "",
+      "decoded_text": "GET \ufffd.\ufffd./\ufffd.\ufffd./\ufffd.\ufffd./\ufffd.\ufffd./boot.ini ",
+      "has_marker": false,
+      "crs_blocked": true,
+      "matched_rules": "913100;920440;930130;930100;949110",
+      "model_all12_fired": true,
+      "model_no272_fired": true,
+      "firing_labels": [
+        "272 - Protocol Manipulation",
+        "310 - Scanning for Vulnerable Software"
+      ],
+      "firing_scores": {
+        "272 - Protocol Manipulation": 0.9964178800582886,
+        "310 - Scanning for Vulnerable Software": 0.8619362711906433
+      }
+    },
+    {
+      "ut_idx": 29130,
+      "dataset_idx": 542080,
+      "method": "OPTIONS",
+      "url": "/blog/wp-content/uploads/2020/04/38536cfd-4e8b-3340-b4c4-af387cc163a8-1024x682.jpg",
+      "body": "",
+      "decoded_text": "OPTIONS /blog/wp-content/uploads/2020/04/38536cfd-4e8b-3340-b4c4-af387cc163a8-1024x682.jpg ",
+      "has_marker": false,
+      "crs_blocked": false,
+      "matched_rules": "nan",
+      "model_all12_fired": true,
+      "model_no272_fired": true,
+      "firing_labels": [
+        "194 - Fake the Source of Data"
+      ],
+      "firing_scores": {
+        "194 - Fake the Source of Data": 0.9054714441299438
+      }
+    },
+    {
+      "ut_idx": 9271,
+      "dataset_idx": 177092,
+      "method": "POST",
+      "url": "/blog/wp-comments-post.php",
+      "body": "comment=&author=NULL&email=foo-bar%40example.com&url=http%3A%2F%2Fwww.example.com&submit=Post+Comment&comment_post_ID=11&comment_parent=0",
+      "decoded_text": "POST /blog/wp-comments-post.php comment=&author=NULL&email=foo-bar@example.com&url=http://www.example.com&submit=Post+Comment&comment_post_ID=11&comment_parent=0",
+      "has_marker": false,
+      "crs_blocked": false,
+      "matched_rules": "nan",
+      "model_all12_fired": true,
+      "model_no272_fired": true,
+      "firing_labels": [
+        "66 - SQL Injection"
+      ],
+      "firing_scores": {
+        "66 - SQL Injection": 0.7434630393981934
+      }
+    },
+    {
+      "ut_idx": 5523,
+      "dataset_idx": 104351,
+      "method": "POST",
+      "url": "/blog/index.php/my-account/lost-password/",
+      "body": "user_login=giddyFerret3&ur_reset_password=true&_wpnonce=4b87c6adf6&_wp_http_referer=%2Fblog%2Findex.php%2Fmy-account%2Flost-password%2F",
+      "decoded_text": "POST /blog/index.php/my-account/lost-password/ user_login=giddyFerret3&ur_reset_password=true&_wpnonce=4b87c6adf6&_wp_http_referer=/blog/index.php/my-account/lost-password/",
+      "has_marker": false,
+      "crs_blocked": false,
+      "matched_rules": "nan",
+      "model_all12_fired": true,
+      "model_no272_fired": true,
+      "firing_labels": [
+        "66 - SQL Injection"
+      ],
+      "firing_scores": {
+        "66 - SQL Injection": 0.7359212040901184
+      }
+    },
+    {
+      "ut_idx": 29233,
+      "dataset_idx": 544678,
+      "method": "GET",
+      "url": "/",
+      "body": "",
+      "decoded_text": "GET / ",
+      "has_marker": false,
+      "crs_blocked": false,
+      "matched_rules": "nan",
+      "model_all12_fired": true,
+      "model_no272_fired": true,
+      "firing_labels": [
+        "310 - Scanning for Vulnerable Software"
+      ],
+      "firing_scores": {
+        "310 - Scanning for Vulnerable Software": 0.6974083781242371
+      }
+    },
+    {
+      "ut_idx": 19289,
+      "dataset_idx": 353492,
+      "method": "GET",
+      "url": "//wp-content/plugins",
+      "body": "",
+      "decoded_text": "GET //wp-content/plugins ",
+      "has_marker": false,
+      "crs_blocked": false,
+      "matched_rules": "nan",
+      "model_all12_fired": true,
+      "model_no272_fired": true,
+      "firing_labels": [
+        "310 - Scanning for Vulnerable Software"
+      ],
+      "firing_scores": {
+        "310 - Scanning for Vulnerable Software": 0.9834747910499573
+      }
+    },
+    {
+      "ut_idx": 19425,
+      "dataset_idx": 357756,
+      "method": "GET",
+      "url": "/blog/wp-includes/js/admin-bar.min.js?ver=4.9.5",
+      "body": "",
+      "decoded_text": "GET /blog/wp-includes/js/admin-bar.min.js?ver=4.9.5 ",
+      "has_marker": false,
+      "crs_blocked": false,
+      "matched_rules": "nan",
+      "model_all12_fired": true,
+      "model_no272_fired": true,
+      "firing_labels": [
+        "66 - SQL Injection"
+      ],
+      "firing_scores": {
+        "66 - SQL Injection": 0.722935140132904
+      }
+    },
+    {
+      "ut_idx": 1464,
+      "dataset_idx": 28913,
+      "method": "GET",
+      "url": "/wp-content/wp-content",
+      "body": "",
+      "decoded_text": "GET /wp-content/wp-content ",
+      "has_marker": false,
+      "crs_blocked": false,
+      "matched_rules": "nan",
+      "model_all12_fired": true,
+      "model_no272_fired": true,
+      "firing_labels": [
+        "310 - Scanning for Vulnerable Software"
+      ],
+      "firing_scores": {
+        "310 - Scanning for Vulnerable Software": 0.9886488318443298
+      }
+    },
+    {
+      "ut_idx": 21426,
+      "dataset_idx": 394702,
+      "method": "GET",
+      "url": "/blog/wp-content/themes/twentyseventeen/assets/js/html5.js?ver=3.7.3",
+      "body": "",
+      "decoded_text": "GET /blog/wp-content/themes/twentyseventeen/assets/js/html5.js?ver=3.7.3 ",
+      "has_marker": false,
+      "crs_blocked": false,
+      "matched_rules": "nan",
+      "model_all12_fired": true,
+      "model_no272_fired": true,
+      "firing_labels": [
+        "66 - SQL Injection"
+      ],
+      "firing_scores": {
+        "66 - SQL Injection": 0.8131226897239685
+      }
+    },
+    {
+      "ut_idx": 9144,
+      "dataset_idx": 174495,
+      "method": "GET",
+      "url": "/blog/index.php/wp-json/oembed/1.0/embed?format=xml&url=http%3A%2F%2Ftest-site.com%2Fblog%2Findex.php%2Fvitae-dolores-quidem-possimus-aut-voluptatibus%2F%27%22",
+      "body": "",
+      "decoded_text": "GET /blog/index.php/wp-json/oembed/1.0/embed?format=xml&url=http://test-site.com/blog/index.php/vitae-dolores-quidem-possimus-aut-voluptatibus/'\" ",
+      "has_marker": false,
+      "crs_blocked": false,
+      "matched_rules": "nan",
+      "model_all12_fired": true,
+      "model_no272_fired": true,
+      "firing_labels": [
+        "66 - SQL Injection"
+      ],
+      "firing_scores": {
+        "66 - SQL Injection": 0.8525263071060181
+      }
+    },
+    {
+      "ut_idx": 19426,
+      "dataset_idx": 357818,
+      "method": "GET",
+      "url": "/blog/wp-includes/js/api-request.min.js?ver=4.9.5",
+      "body": "",
+      "decoded_text": "GET /blog/wp-includes/js/api-request.min.js?ver=4.9.5 ",
+      "has_marker": false,
+      "crs_blocked": false,
+      "matched_rules": "nan",
+      "model_all12_fired": true,
+      "model_no272_fired": true,
+      "firing_labels": [
+        "66 - SQL Injection"
+      ],
+      "firing_scores": {
+        "66 - SQL Injection": 0.7142553329467773
+      }
+    },
+    {
+      "ut_idx": 11733,
+      "dataset_idx": 224142,
+      "method": "GET",
+      "url": "/blog/wp-includes/js/wp-util.min.js?ver=4.9.5",
+      "body": "",
+      "decoded_text": "GET /blog/wp-includes/js/wp-util.min.js?ver=4.9.5 ",
+      "has_marker": false,
+      "crs_blocked": false,
+      "matched_rules": "nan",
+      "model_all12_fired": true,
+      "model_no272_fired": true,
+      "firing_labels": [
+        "66 - SQL Injection"
+      ],
+      "firing_scores": {
+        "66 - SQL Injection": 0.9069263339042664
+      }
+    },
+    {
+      "ut_idx": 217,
+      "dataset_idx": 4366,
+      "method": "GET",
+      "url": "/blog/wp-content/themes/twentyseventeen/.git",
+      "body": "",
+      "decoded_text": "GET /blog/wp-content/themes/twentyseventeen/.git ",
+      "has_marker": false,
+      "crs_blocked": false,
+      "matched_rules": "nan",
+      "model_all12_fired": true,
+      "model_no272_fired": true,
+      "firing_labels": [
+        "126 - Path Traversal"
+      ],
+      "firing_scores": {
+        "126 - Path Traversal": 0.9859390258789062
+      }
+    },
+    {
+      "ut_idx": 9282,
+      "dataset_idx": 177245,
+      "method": "POST",
+      "url": "/blog/wp-comments-post.php",
+      "body": "comment=%28&submit=Post+Comment&comment_post_ID=56&comment_parent=0",
+      "decoded_text": "POST /blog/wp-comments-post.php comment=(&submit=Post+Comment&comment_post_ID=56&comment_parent=0",
+      "has_marker": false,
+      "crs_blocked": false,
+      "matched_rules": "nan",
+      "model_all12_fired": true,
+      "model_no272_fired": true,
+      "firing_labels": [
+        "66 - SQL Injection"
+      ],
+      "firing_scores": {
+        "66 - SQL Injection": 0.7514690160751343
+      }
+    },
+    {
+      "ut_idx": 21401,
+      "dataset_idx": 394032,
+      "method": "GET",
+      "url": "/blog/wp-content/themes/twentyseventeen/assets/css/ie8.css?ver=1.0",
+      "body": "",
+      "decoded_text": "GET /blog/wp-content/themes/twentyseventeen/assets/css/ie8.css?ver=1.0 ",
+      "has_marker": false,
+      "crs_blocked": false,
+      "matched_rules": "nan",
+      "model_all12_fired": true,
+      "model_no272_fired": true,
+      "firing_labels": [
+        "66 - SQL Injection"
+      ],
+      "firing_scores": {
+        "66 - SQL Injection": 0.802117645740509
+      }
+    },
+    {
+      "ut_idx": 1436,
+      "dataset_idx": 28531,
+      "method": "GET",
+      "url": "/blog/wp-admin/load-styles.php?c=0&dir=ltr&load%5B%5D=dashicons%2Cbuttons%2Cforms%2Cl10n%2Clogin&ver=c%3A%2F",
+      "body": "",
+      "decoded_text": "GET /blog/wp-admin/load-styles.php?c=0&dir=ltr&load[]=dashicons,buttons,forms,l10n,login&ver=c:/ ",
+      "has_marker": false,
+      "crs_blocked": false,
+      "matched_rules": "nan",
+      "model_all12_fired": true,
+      "model_no272_fired": true,
+      "firing_labels": [
+        "66 - SQL Injection"
+      ],
+      "firing_scores": {
+        "66 - SQL Injection": 0.9121254682540894
+      }
+    },
+    {
+      "ut_idx": 445,
+      "dataset_idx": 7493,
+      "method": "GET",
+      "url": "/App/?content=die(sha1(xyzt))",
+      "body": "",
+      "decoded_text": "GET /App/?content=die(sha1(xyzt)) ",
+      "has_marker": false,
+      "crs_blocked": true,
+      "matched_rules": "942151;949110",
+      "model_all12_fired": true,
+      "model_no272_fired": true,
+      "firing_labels": [
+        "310 - Scanning for Vulnerable Software"
+      ],
+      "firing_scores": {
+        "310 - Scanning for Vulnerable Software": 0.9525101184844971
+      }
+    },
+    {
+      "ut_idx": 17424,
+      "dataset_idx": 314961,
+      "method": "POST",
+      "url": "/blog/wp-comments-post.php",
+      "body": "comment=&submit=Post+Comment&comment_post_ID=5%3BURL%3D%27http%3A%2F%2F8501779237819759495.owasp.org%27&comment_parent=0",
+      "decoded_text": "POST /blog/wp-comments-post.php comment=&submit=Post+Comment&comment_post_ID=5;URL='http://8501779237819759495.owasp.org'&comment_parent=0",
+      "has_marker": false,
+      "crs_blocked": true,
+      "matched_rules": "932370;949110",
+      "model_all12_fired": true,
+      "model_no272_fired": true,
+      "firing_labels": [
+        "66 - SQL Injection"
+      ],
+      "firing_scores": {
+        "66 - SQL Injection": 0.818898618221283
+      }
+    },
+    {
+      "ut_idx": 218,
+      "dataset_idx": 4438,
+      "method": "GET",
+      "url": "/blog/wp-includes/css/.svn",
+      "body": "",
+      "decoded_text": "GET /blog/wp-includes/css/.svn ",
+      "has_marker": false,
+      "crs_blocked": false,
+      "matched_rules": "nan",
+      "model_all12_fired": true,
+      "model_no272_fired": true,
+      "firing_labels": [
+        "126 - Path Traversal"
+      ],
+      "firing_scores": {
+        "126 - Path Traversal": 0.9956042766571045
+      }
+    },
+    {
+      "ut_idx": 27316,
+      "dataset_idx": 506268,
+      "method": "GET",
+      "url": "/icons/c%3A%2F",
+      "body": "",
+      "decoded_text": "GET /icons/c:/ ",
+      "has_marker": false,
+      "crs_blocked": false,
+      "matched_rules": "920350",
+      "model_all12_fired": true,
+      "model_no272_fired": false,
+      "firing_labels": [
+        "272 - Protocol Manipulation"
+      ],
+      "firing_scores": {
+        "272 - Protocol Manipulation": 0.9967318773269653
+      }
+    },
+    {
+      "ut_idx": 19484,
+      "dataset_idx": 360114,
+      "method": "GET",
+      "url": "/blog/wp-admin/load-styles.php?c=0&dir=ltr&load%5B%5D=webapps%2Fload-styles.php&ver=4.9.5",
+      "body": "",
+      "decoded_text": "GET /blog/wp-admin/load-styles.php?c=0&dir=ltr&load[]=webapps/load-styles.php&ver=4.9.5 ",
+      "has_marker": false,
+      "crs_blocked": false,
+      "matched_rules": "nan",
+      "model_all12_fired": true,
+      "model_no272_fired": true,
+      "firing_labels": [
+        "66 - SQL Injection"
+      ],
+      "firing_scores": {
+        "66 - SQL Injection": 0.9762203693389893
+      }
+    }
+  ]
+}

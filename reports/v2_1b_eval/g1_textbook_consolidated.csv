@@ -1,0 +1,31 @@
+Attack_Class,Placement,Total,Model_Target_Pct,Model_Any_Pct,CRS_Blocked_Pct,Union_Blocked_Pct,Target_Count,Any_Count,CRS_Count,Union_Count
+SQL Injection,query_arg,15,73.3,93.3,100.0,100.0,11/15,14/15,15/15,15/15
+SQL Injection,post_body_with_ct,15,86.7,93.3,100.0,100.0,13/15,14/15,15/15,15/15
+SQL Injection,post_body_no_ct,15,26.7,60.0,100.0,100.0,4/15,9/15,15/15,15/15
+SQL Injection,url_path,15,26.7,60.0,13.3,73.3,4/15,9/15,2/15,11/15
+SQL Injection,cookie,15,0.0,0.0,100.0,100.0,0/15,0/15,15/15,15/15
+SQL Injection,Subtotal (4 Canonical),60,53.3,76.7,78.3,93.3,32/60,46/60,47/60,56/60
+SQL Injection,Total (All 5 Placements),75,42.7,61.3,82.7,94.7,32/75,46/75,62/75,71/75
+XSS,query_arg,10,100.0,100.0,100.0,100.0,10/10,10/10,10/10,10/10
+XSS,post_body_with_ct,10,90.0,90.0,100.0,100.0,9/10,9/10,10/10,10/10
+XSS,post_body_no_ct,10,10.0,90.0,100.0,100.0,1/10,9/10,10/10,10/10
+XSS,url_path,10,10.0,100.0,100.0,100.0,1/10,10/10,10/10,10/10
+XSS,cookie,10,0.0,0.0,100.0,100.0,0/10,0/10,10/10,10/10
+XSS,Subtotal (4 Canonical),40,52.5,95.0,100.0,100.0,21/40,38/40,40/40,40/40
+XSS,Total (All 5 Placements),50,42.0,76.0,100.0,100.0,21/50,38/50,50/50,50/50
+Path Traversal,query_arg,5,100.0,100.0,100.0,100.0,5/5,5/5,5/5,5/5
+Path Traversal,post_body_with_ct,5,100.0,100.0,100.0,100.0,5/5,5/5,5/5,5/5
+Path Traversal,post_body_no_ct,5,60.0,100.0,100.0,100.0,3/5,5/5,5/5,5/5
+Path Traversal,url_path,5,80.0,80.0,20.0,80.0,4/5,4/5,1/5,4/5
+Path Traversal,cookie,5,0.0,0.0,100.0,100.0,0/5,0/5,5/5,5/5
+Path Traversal,Subtotal (4 Canonical),20,85.0,95.0,80.0,95.0,17/20,19/20,16/20,19/20
+Path Traversal,Total (All 5 Placements),25,68.0,76.0,84.0,96.0,17/25,19/25,21/25,24/25
+Command Injection,query_arg,10,20.0,60.0,70.0,90.0,2/10,6/10,7/10,9/10
+Command Injection,post_body_with_ct,10,20.0,20.0,70.0,70.0,2/10,2/10,7/10,7/10
+Command Injection,post_body_no_ct,10,0.0,50.0,100.0,100.0,0/10,5/10,10/10,10/10
+Command Injection,url_path,10,0.0,90.0,10.0,90.0,0/10,9/10,1/10,9/10
+Command Injection,cookie,10,0.0,0.0,20.0,20.0,0/10,0/10,2/10,2/10
+Command Injection,Subtotal (4 Canonical),40,10.0,55.0,62.5,87.5,4/40,22/40,25/40,35/40
+Command Injection,Total (All 5 Placements),50,8.0,44.0,54.0,74.0,4/50,22/50,27/50,37/50
+ALL CLASSES,OVERALL (4 Canonical),160,46.2,78.1,80.0,93.8,74/160,125/160,128/160,150/160
+ALL CLASSES,OVERALL (All 5 Placements),200,37.0,62.5,80.0,91.0,74/200,125/200,160/200,182/200

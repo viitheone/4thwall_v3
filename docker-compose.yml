@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile.api
     environment:
-      - MODEL_PATH=viitheone/waf-model
+      - MODEL_PATH=viitheone/4thwall-waf-v2.1b
       - DECISION_LOG=/app/logs/decision_log.json
       - DVWA_URL=http://dvwa:80
     volumes:
