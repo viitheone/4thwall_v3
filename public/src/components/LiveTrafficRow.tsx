@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { type LiveTrafficEntry, flagFalsePositive } from '../api/dashboard';
 
 interface Props {
@@ -11,10 +11,16 @@ const methodClassMap: Record<string, string> = {
 };
 
 export function LiveTrafficRow({ entry }: Props) {
-  const [flagged, setFlagged] = useState(false);
+  const [flagged, setFlagged] = useState(entry.isFlagged ?? false);
   const isMalicious = entry.verdict === 'malicious';
   const isAlert = entry.verdict === 'alert' || entry.verdict === 'suspicious';
   const methodClass = methodClassMap[entry.method.toUpperCase()] ?? 'badge-method badge-method-get';
+
+  useEffect(() => {
+    if (entry.isFlagged) {
+      setFlagged(true);
+    }
+  }, [entry.isFlagged]);
 
   const handleFlagFP = async () => {
     try {

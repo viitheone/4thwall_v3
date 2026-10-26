@@ -20,6 +20,7 @@ from ml.preprocess import parse_serialized_request
 router = APIRouter(prefix="/dashboard", tags=["dashboard"])
 
 DECISION_LOG_PATH = os.environ.get("DECISION_LOG", "logs/decision_log.json")
+RETRAIN_LOG_PATH = os.environ.get("RETRAIN_LOG", "logs/retrain_log.json")
 
 # Categories excluded from the Attack Distribution pie chart as requested
 EXCLUDED_DISTRIBUTION_TYPES = {
@@ -35,21 +36,24 @@ EXCLUDED_DISTRIBUTION_TYPES = {
 _subscribers: set[asyncio.Event] = set()
 
 def notify_dashboard_update() -> None:
-    """Notify all connected SSE subscribers of new decisions."""
+    """Notify all connected SSE subscribers of new decisions or FP flags."""
     for ev in list(_subscribers):
         ev.set()
 
 
-def _get_log_fingerprint() -> tuple[float, int]:
-    """Return (mtime, size) to quickly detect log file changes without reading it."""
-    path = Path(DECISION_LOG_PATH)
-    if not path.exists():
-        return (0.0, 0)
-    try:
-        stat = path.stat()
-        return (stat.st_mtime, stat.st_size)
-    except OSError:
-        return (0.0, 0)
+def _get_log_fingerprint() -> tuple:
+    """Return mtime and size for decision_log and retrain_log to detect updates."""
+    def _stat(p_str: str) -> tuple[float, int]:
+        p = Path(p_str)
+        if not p.exists():
+            return (0.0, 0)
+        try:
+            st = p.stat()
+            return (st.st_mtime, st.st_size)
+        except OSError:
+            return (0.0, 0)
+
+    return (_stat(DECISION_LOG_PATH), _stat(RETRAIN_LOG_PATH))
 
 
 def _read_decision_log(max_lines: int = 0) -> list[dict]:
@@ -71,6 +75,27 @@ def _read_decision_log(max_lines: int = 0) -> list[dict]:
                 out.append(json.loads(line))
             except json.JSONDecodeError:
                 continue
+        return out
+    except OSError:
+        return []
+
+
+def _read_retrain_log() -> list[dict]:
+    """Read retrain log entries (flagged false positives and sync corrections)."""
+    path = Path(RETRAIN_LOG_PATH)
+    if not path.exists():
+        return []
+    out = []
+    try:
+        with open(path, "r", encoding="utf-8", errors="ignore") as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    out.append(json.loads(line))
+                except json.JSONDecodeError:
+                    continue
         return out
     except OSError:
         return []
@@ -147,20 +172,22 @@ def get_summary():
     benign = total - malicious
     modsec_blocks = sum(1 for e in entries if e.get("blocked_by") == "modsec")
     ml_blocks = sum(1 for e in entries if e.get("blocked_by") == "ml_model")
-    correct = sum(
-        1 for e in entries
-        if (e.get("action") == "BLOCK")
-        or (e.get("action") == "ALERT")
-        or (e.get("action") == "ALLOW")
-    )
-    accuracy = (correct / total) if total else 0.0
+
+    retrain_entries = _read_retrain_log()
+    flagged_timestamps = {
+        r.get("timestamp") for r in retrain_entries if r.get("timestamp")
+    }
+    active_timestamps = {e.get("timestamp") for e in entries if e.get("timestamp")}
+    errors = len(flagged_timestamps.intersection(active_timestamps))
+    accuracy = round((total - errors) / total, 2) if total else 1.0
+
     return {
         "totalRequests": total,
         "benignRequests": benign,
         "maliciousRequests": malicious,
         "modsecBlocks": modsec_blocks,
         "mlBlocks": ml_blocks,
-        "accuracy": round(accuracy, 2),
+        "accuracy": accuracy,
     }
 
 
@@ -168,6 +195,10 @@ def get_summary():
 def get_live_traffic():
     """Last N decisions as live traffic entries for the dashboard."""
     entries = _read_decision_log(max_lines=100)
+    retrain_entries = _read_retrain_log()
+    flagged_timestamps = {
+        r.get("timestamp") for r in retrain_entries if r.get("timestamp")
+    }
     result = []
     for i, e in enumerate(reversed(entries)):
         parsed = parse_serialized_request(e.get("request_text", ""))
@@ -181,10 +212,11 @@ def get_live_traffic():
         else:
             verdict = "benign"
         attack_type = _extract_attack_type(e)
+        ts = e.get("timestamp", "")
         
         result.append({
             "id": f"live-{len(entries)-i}",
-            "timestamp": e.get("timestamp", ""),
+            "timestamp": ts,
             "method": parsed.get("method", "GET"),
             "path": parsed.get("path", "/"),
             "ip": "0.0.0.0",
@@ -193,6 +225,7 @@ def get_live_traffic():
             "blockedBy": blocked_by,
             "attackType": attack_type,
             "aiConfidence": round(score, 2),
+            "isFlagged": ts in flagged_timestamps,
         })
     return result
 
@@ -275,13 +308,15 @@ def _compute_dashboard_data(request: Request | None = None) -> dict:
     benign = total - malicious
     modsec_blocks = sum(1 for e in entries if e.get("blocked_by") == "modsec")
     ml_blocks = sum(1 for e in entries if e.get("blocked_by") == "ml_model")
-    correct = sum(
-        1 for e in entries
-        if (e.get("action") == "BLOCK")
-        or (e.get("action") == "ALERT")
-        or (e.get("action") == "ALLOW")
-    )
-    accuracy = round((correct / total) if total else 0.0, 2)
+
+    retrain_entries = _read_retrain_log()
+    flagged_timestamps = {
+        r.get("timestamp") for r in retrain_entries if r.get("timestamp")
+    }
+    active_timestamps = {e.get("timestamp") for e in entries if e.get("timestamp")}
+    errors = len(flagged_timestamps.intersection(active_timestamps))
+    accuracy = round((total - errors) / total, 2) if total else 1.0
+
     summary = {
         "totalRequests": total,
         "benignRequests": benign,
@@ -306,10 +341,11 @@ def _compute_dashboard_data(request: Request | None = None) -> dict:
         else:
             verdict = "benign"
         attack_type = _extract_attack_type(e)
+        ts = e.get("timestamp", "")
         
         traffic.append({
             "id": f"live-{len(live_slice)-i}",
-            "timestamp": e.get("timestamp", ""),
+            "timestamp": ts,
             "method": parsed.get("method", "GET"),
             "path": parsed.get("path", "/"),
             "ip": "0.0.0.0",
@@ -318,6 +354,7 @@ def _compute_dashboard_data(request: Request | None = None) -> dict:
             "blockedBy": blocked_by,
             "attackType": attack_type,
             "aiConfidence": round(score, 2),
+            "isFlagged": ts in flagged_timestamps,
         })
 
     # 3. Attack distribution (excluding suppressed categories)
@@ -461,4 +498,5 @@ def flag_false_positive(req: FlagFPRequest, request: Request):
             "action_taken": matched_entry.get("action", "BLOCK") if matched_entry else "BLOCK"
         }) + "\n")
         
+    notify_dashboard_update()
     return {"status": "success"}

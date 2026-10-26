@@ -20,6 +20,7 @@ export interface LiveTrafficEntry {
   attackType?: string;
   ruleId?: string;
   aiConfidence?: number;
+  isFlagged?: boolean;
 }
 
 export interface AttackDistributionPoint {
