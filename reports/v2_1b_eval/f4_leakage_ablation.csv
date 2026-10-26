@@ -1,0 +1,4 @@
+Model Split Architecture,Evaluation Dataset,Template Overlap with Train,Macro-F1 (All 13 Classes),Macro-F1 (Excluding 272),Micro-F1,Evaluation Condition
+Leaky Split Model (Random 80/10/10 Split),"Leaky Test Set (90,782 rows, 74.31% Overlap)",74.31%,0.867,0.9216,0.9282,Evaluated on its own leaky holdout test
+Grouped Split Model (v2.1b Template-Disjoint),"Grouped Test Row-Weighted (90,782 rows)",0.00% (Strict URL-Disjoint),0.9278,0.986,0.9821,Evaluated on its own grouped row-weighted test
+Grouped Split Model (v2.1b Template-Disjoint),"Grouped Test Unique-Template (29,996 rows)",0.00% (Strict URL-Disjoint),0.9831,0.9923,0.9912,Evaluated on its own grouped unique-template test
