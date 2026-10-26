@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { type LiveTrafficEntry, flagFalsePositive } from '../api/dashboard';
 
 interface Props {
@@ -11,9 +11,16 @@ const methodClassMap: Record<string, string> = {
 };
 
 export function LiveTrafficRow({ entry }: Props) {
-  const [flagged, setFlagged] = useState(false);
+  const [flagged, setFlagged] = useState(entry.isFlagged ?? false);
   const isMalicious = entry.verdict === 'malicious';
+  const isAlert = entry.verdict === 'alert' || entry.verdict === 'suspicious';
   const methodClass = methodClassMap[entry.method.toUpperCase()] ?? 'badge-method badge-method-get';
+
+  useEffect(() => {
+    if (entry.isFlagged) {
+      setFlagged(true);
+    }
+  }, [entry.isFlagged]);
 
   const handleFlagFP = async () => {
     try {
@@ -27,7 +34,7 @@ export function LiveTrafficRow({ entry }: Props) {
   return (
     <div
       className={`flex flex-col gap-1 rounded-lg border px-3 py-2 text-xs ${
-        isMalicious ? 'row-malicious' : 'row-benign'
+        isMalicious ? 'row-malicious' : isAlert ? 'row-alert' : 'row-benign'
       }`}
     >
       <div className="flex items-center justify-between gap-2">
@@ -38,22 +45,38 @@ export function LiveTrafficRow({ entry }: Props) {
           <span className={methodClass}>{entry.method.toUpperCase()}</span>
           <span className="truncate font-medium text-panel">{entry.path}</span>
         </div>
-        <span className="text-[11px] text-panel/70">
-          from {entry.ip} – {entry.statusCode}
-        </span>
+        <div className="flex items-center gap-2">
+          {isAlert && (
+            <span className="rounded border border-amber-500/40 bg-amber-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-amber-400 uppercase tracking-wider">
+              Alert (200 OK)
+            </span>
+          )}
+          {isMalicious && (
+            <span className="rounded border border-rose-500/40 bg-rose-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-rose-400 uppercase tracking-wider">
+              Blocked (403)
+            </span>
+          )}
+          <span className="text-[11px] text-panel/70">
+            from {entry.ip} – {entry.statusCode}
+          </span>
+        </div>
       </div>
 
-      {isMalicious && (
+      {(isMalicious || isAlert) && (
         <div className="flex items-center justify-between gap-2 mt-1">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-[11px] font-semibold text-panel underline decoration-panel/30 underline-offset-2">
-              {entry.attackType ?? 'Malicious request detected'}
+            <span
+              className={`text-[11px] font-semibold ${
+                isAlert ? 'text-amber-400' : 'text-panel'
+              } underline decoration-panel/30 underline-offset-2`}
+            >
+              {entry.attackType ?? (isAlert ? 'Suspicious activity detected' : 'Malicious request detected')}
             </span>
             {entry.ruleId && <span className="badge-rule">Rule: {entry.ruleId}</span>}
             {typeof entry.aiConfidence === 'number' && (
               <span className="text-[11px] text-panel/70">
-                AI Confidence:{' '}
-                <span className="font-semibold">
+                Class Probability:{' '}
+                <span className="font-semibold text-panel">
                   {(entry.aiConfidence * 100).toFixed(1)}
                   %
                 </span>
@@ -76,4 +99,3 @@ export function LiveTrafficRow({ entry }: Props) {
     </div>
   );
 }
-

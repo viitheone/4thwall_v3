@@ -14,6 +14,7 @@ import {
 } from './api/dashboard';
 import { LiveTrafficRow } from './components/LiveTrafficRow';
 import { TopAttackerCard } from './components/TopAttackerCard';
+import logoWordmark from './assets/4thwall-wordmark-white-transparent.svg';
 import {
   Bar,
   BarChart,
@@ -119,7 +120,7 @@ function App() {
     <div className="min-h-screen bg-background px-8 py-6 text-panel">
       <header className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-panel">4thwall</h1>
+          <img src={logoWordmark} alt="4thwall" className="h-8 w-auto max-w-[180px] object-contain object-left mb-1" />
           <p className="text-sm text-panel/70">
             Real-time anomaly detection for web traffic
           </p>

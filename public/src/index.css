@@ -52,6 +52,10 @@ body {
   @apply border-l-2 border-panel bg-panel/10;
 }
 
+.row-alert {
+  @apply border-l-2 border-amber-500/80 bg-amber-500/10;
+}
+
 .row-benign {
   @apply border border-panel/15 bg-panel/5;
 }

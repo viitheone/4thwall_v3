@@ -1,6 +1,6 @@
 import { apiClient } from './client';
 
-export type TrafficVerdict = 'benign' | 'malicious';
+export type TrafficVerdict = 'benign' | 'malicious' | 'alert' | 'suspicious';
 
 export interface SummaryStats {
   totalRequests: number;
@@ -20,6 +20,7 @@ export interface LiveTrafficEntry {
   attackType?: string;
   ruleId?: string;
   aiConfidence?: number;
+  isFlagged?: boolean;
 }
 
 export interface AttackDistributionPoint {
