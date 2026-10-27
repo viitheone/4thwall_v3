@@ -70,3 +70,14 @@ agent-transcripts/
 ############################
 AI_CONTEXT.md
 CONTRIBUTOR_GUIDE.md
+
+############################
+# Evaluation & benchmark scratch artifacts
+############################
+replay_crs.py
+outputs/
+crs_results*.csv
+replay_payloads*.csv
+
+model_v2.0/
+reports/
