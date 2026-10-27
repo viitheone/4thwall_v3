@@ -1,6 +1,0 @@
-Split,Threshold Type,Macro F1 (All 13),Macro F1 (Excl 272),Micro F1,Weighted F1,Macro Precision,Macro Recall,Hamming Loss,Subset Accuracy
-"Val Reference (90,781 rows)",Val-Tuned Frozen,0.9563,0.9922,0.9925,0.9918,0.9603,0.9546,0.0028,0.9842
-"Test Row-Weighted (90,782 rows)",Val-Tuned Frozen,0.9278,0.986,0.9821,0.9798,0.9412,0.932,0.0051,0.9712
-"Test Row-Weighted (90,782 rows)",Default 0.5,0.881,0.951,0.9415,0.946,0.892,0.921,0.0124,0.9325
-"Test Unique-Template (29,996 rows)",Val-Tuned Frozen,0.9831,0.9923,0.9912,0.9911,0.9846,0.9824,0.0014,0.9873
-"Test Unique-Template (29,996 rows)",Default 0.5,0.9502,0.9741,0.9824,0.9844,0.9186,0.9962,0.0028,0.9794
